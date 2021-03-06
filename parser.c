@@ -1,11 +1,4 @@
-#include <fcntl.h>
-#include <stdarg.h>
 #include "ft_cub.h"
-#include "libft/libft.h"
-#include "get_next_line.h"
-// #include "libft.h/cub"
-
-
 
 char	**make_map(t_list **head, int size)
 {
@@ -20,7 +13,7 @@ char	**make_map(t_list **head, int size)
 	}
 	i = -1;
 	while (map[++i])
-		ft_putendl(map[i]);
+		ft_putendl_fd(map[i]);
 	return (map);
 }
 
@@ -30,8 +23,12 @@ int		main(int argc, char **argv)
 	char	*line = NULL;
 	t_list	*head = NULL;
 
+	// if (argc >= 2)
+	// {
 	while (get_next_line(fd, &line))
 		ft_lstadd_back(&head, ft_lstnew(line));
 	ft_lstadd_back(&head, ft_lstnew(line));
 	make_map(&head, ft_lstsize(head));
+	// }
+	//ft_window();
 }

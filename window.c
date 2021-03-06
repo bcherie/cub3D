@@ -1,12 +1,4 @@
-#include "libx/mlx.h"
-
-typedef struct  s_data {
-    void        *img;
-    char        *addr;
-    int         bits_per_pixel;
-    int         line_length;
-    int         endian;
-}               t_data;
+#include "ft_cub.h"
 
 void            my_mlx_pixel_put(t_data *data, int x, int y, int color)
 {
@@ -16,9 +8,9 @@ void            my_mlx_pixel_put(t_data *data, int x, int y, int color)
     *(unsigned int*)dst = color;
 }
 
-int     main(void)
+int     ft_window(void)
 {
-    t_data    *img;
+  //  t_data    *img;
     void    *mlx;
     void    *mlx_w;
     int     x;
@@ -43,4 +35,5 @@ int     main(void)
     }
     //mlx_put_image_to_window(mlx, mlx_w, img->img, 0, 0);
 	mlx_loop(mlx);
+    return (0);
 }
