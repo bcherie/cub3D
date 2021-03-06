@@ -1,9 +1,16 @@
+SRC = window.c parser.c get_next_line.c get_next_line_utils.c
 
 NAME = cub3d
 
 CC = gcc
 
-LIBOBJS	= ${LIBSRC:.c=.o}
+OBJS	= ${SRC:.c=.o}
+
+INCLUDES = 
+
+LIBS = -L../ -L/Users/bcherie/cub3D/libmlx.a -lm
+
+HEADER = 
 
 CFLAGS	= -Wall -Werror -Wextra
 
@@ -14,13 +21,13 @@ libft/%.o: libft/%.c
 %.o: %.c
     $(CC) -Wall -Wextra -Werror -Imlx -c $< -o $@
 
-$(NAME): $(OBJ)
+$(NAME): $(OBJS)
     $(CC) -Lmlx -lmlx -framework OpenGL -framework AppKit -o $(NAME)
 
 all: $(NAME)
 
-$(NAME): $(LIBOBJS)
-		ar rc $(NAME) $(LIBOBJS)
+$(NAME): $(OBJS)
+		ar rc $(NAME) $(OBJS)
 		ranlib $(NAME)
 
 clean:

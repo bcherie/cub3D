@@ -1,7 +1,11 @@
 #include <fcntl.h>
 #include <stdarg.h>
 #include "ft_cub.h"
+#include "libft/libft.h"
+#include "get_next_line.h"
 // #include "libft.h/cub"
+
+
 
 char	**make_map(t_list **head, int size)
 {
