@@ -17,18 +17,26 @@ char	**make_map(t_list **head, int size)
 	return (map);
 }
 
+
 int		main(int argc, char **argv)
 {
 	int		fd = open(argv[1], O_RDONLY);
 	char	*line = NULL;
 	t_list	*head = NULL;
+	//t_all   *all = NULL;
 
-	// if (argc >= 2)
+	// if (argc == 2)
 	// {
-	while (get_next_line(fd, &line))
-		ft_lstadd_back(&head, ft_lstnew(line));
-	ft_lstadd_back(&head, ft_lstnew(line));
-	make_map(&head, ft_lstsize(head));
-	// }
-	//ft_window();
+		// if (ft_strnstr(argv[1], ".cub", ft_strlen(argv[1])))
+		// {
+			while (get_next_line(fd, &line) > 0)
+				ft_lstadd_back(&head, ft_lstnew(line));
+			ft_lstadd_back(&head, ft_lstnew(line));
+			make_map(&head, ft_lstsize(head));
+		// }
+		// else 
+		// 	return (printf("map error"));
+	//}
+	ft_window();
+	//draw_screen(all);
 }

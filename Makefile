@@ -1,4 +1,4 @@
-SRC = window.c parser.c $(DIR_GNL)/get_next_line_utils.c $(DIR_GNL)/get_next_line.c
+SRC = window.c parser.c screen.c $(DIR_GNL)/get_next_line_utils.c $(DIR_GNL)/get_next_line.c
 
 NAME = cub3d
 
@@ -16,7 +16,7 @@ DIR_GNL 	= get_next_line
 
 INCLUDES = -I$(LIBDIR) -I$(LIB_MLX) -I$(DIR_GNL)
 
-CFLAGS	= -Wall -Werror -Wextra
+CFLAGS	= -g -Wall -Werror -Wextra
 MLXLAGS = -lmlx	-framework	OpenGL -framework AppKit
 
 HFILES = ft_cub.h

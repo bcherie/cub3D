@@ -19,8 +19,9 @@
 
 typedef struct s_list
 {
-	void *next;
-	void *content;
+	void	*next;
+	void	*content;
+	//void	*lst;
 
 } 		t_list;
 

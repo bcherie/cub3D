@@ -1,1 +1,2 @@
 gcc window.c libmlx.a -framework OpenGL -framework AppKit
+gcc -g window.c parser.c screen.c get_next_line.c get_next_line_utils.c libft.a libmlx.a -framework OpenGL -framework AppKit
