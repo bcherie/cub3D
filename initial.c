@@ -26,6 +26,14 @@ void ft_init_point(t_point *point) // структура для точки
 	point->y = 0;
 }
 
+// void init_str(t_list *head)
+// {
+// 	head->next = NULL;
+// 	head->content = NULL;
+// 	head->x = 0;
+// 	head->y = 0;
+// }
+
 // typedef struct  s_data {  // подумать и перенести в структуру window
 //     void        *img;
 //     char        *addr;

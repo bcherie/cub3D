@@ -1,6 +1,6 @@
-SRC = window.c parser.c screen.c $(DIR_GNL)/get_next_line_utils.c $(DIR_GNL)/get_next_line.c
+SRC = window.c parser.c screen.c init.c $(DIR_GNL)/get_next_line_utils.c $(DIR_GNL)/get_next_line.c
 
-NAME = cub3d
+NAME = cub3D
 
 CC = gcc
 

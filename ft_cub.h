@@ -5,7 +5,7 @@
 # include <fcntl.h>
 # include <stdarg.h>
 # include "libft/libft.h"
-# include "get_next_line.h"
+# include "get_next_line/get_next_line.h"
 # include "mlx.h"
 
 typedef struct	s_app
@@ -15,6 +15,20 @@ typedef struct	s_app
 
 }				t_app;
 
+typedef struct s_map_p
+{
+	int width;
+	int hight;
+	void *path_no;
+	void *path_so;
+	void *path_we;
+	void *path_ea;
+	void *path_sprite;
+	int *floor;
+	void *ceil;
+	void *next;
+
+}				t_map_p;
 
 typedef struct	s_window //  структура окна
 {
@@ -33,6 +47,7 @@ typedef struct		s_all
 	t_window		*win;
 	//t_plr			*plr;
 	char			**map;
+
 }				t_all;
 
 typedef struct	s_point // структура для точки
@@ -65,6 +80,8 @@ typedef struct	s_plr //структура для игрока и луча
 
 // } 		t_list;
 
+
+
 void	my_mlx_pixel_put(t_window *data, int x, int y, int color);
 char	**make_map(t_list **head, int size);
 int     ft_window(void);
@@ -72,5 +89,9 @@ void	draw_screen(t_all *all);
 void ft_init_w(t_window *win);
 void ft_init_point(t_point *point);
 void ft_init_all(t_all *all);
+void parse(char *line, t_map_p *map);
+//void init_str(t_list *head);
+int	ft_mapsize(t_map_p *map);
+void ft_init(t_map_p *map);
 
 #endif
