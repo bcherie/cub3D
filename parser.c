@@ -14,23 +14,25 @@ int	ft_mapsize(t_map_p *map)
 	return (i);
 }
 
-int		create_trgb(char *tmp[1])
+int		create_trgb(int t, int r, int g, int b)
 {
-	int t;
-	int r; 
-	int g;
-	int b;
-	char **vrem;
+	// int t;
+	// int r; 
+	// int g;
+	// int b;
+
 
 	t = 0; 
-	vrem = ft_split(tmp[1], ',');
-	r = ft_atoi(vrem[0]);
-	g = ft_atoi(vrem[1]);
-	b = ft_atoi(vrem[2]);
+	//vrem = ft_split(tmp[1], ',');
+	//printf ("floor: %s", vrem[1]);
+	// r = ft_atoi(vrem[0]);
+	// g = ft_atoi(vrem[1]);
+	// b = ft_atoi(vrem[2]);
 	// printf("0: %d\n", r);
 	// printf("1: %d\n", g);
 	// printf("2: %d\n", b);
 	return(t << 24 | r << 16 | g << 8 | b);
+	//return (0);
 }
 
 void parse(char *line, t_map_p *map)
@@ -41,6 +43,7 @@ void parse(char *line, t_map_p *map)
 
 	i = 0;
 	char **tmp;
+	char **colr;
 	//map = malloc(sizeof(ft_mapsize(map)));
 
 	tmp = ft_split(&line[i], ' ');
@@ -48,6 +51,8 @@ void parse(char *line, t_map_p *map)
 	{
 		map->width = ft_atoi(tmp[1]);
 		map->hight = ft_atoi(tmp[2]);
+		printf("width: %d\n", map->width);
+		printf("hight: %d\n", map->hight);
 	}
 	else if (line[i] == 'N' && line[++i] == 'O')
 	{
@@ -76,14 +81,22 @@ void parse(char *line, t_map_p *map)
 	}
 	else if (line[i] == 'F' && line[++i] == ' ')
 	{
-		//map->floor = tmp[1];
-		map->floor = create_trgb(&tmp[1]);
+		colr = ft_split(tmp[1], ',');
+		map->R = ft_atoi(colr[0]);
+		map->G = ft_atoi(colr[1]);
+		map->B = ft_atoi(colr[2]);
+		map->floor = create_trgb(0, map->R, map->G, map->B);
 		printf("path_f: %d\n", map->floor);
 	}
 	else if (line[i] == 'C')
 	{
-		map->ceil = tmp[1];
-		printf("path_c: %s\n", map->ceil);
+		//map->ceil = tmp[1];
+		colr = ft_split(tmp[1], ',');
+		map->C_R = ft_atoi(colr[0]);
+		map->C_G = ft_atoi(colr[1]);
+		map->C_B = ft_atoi(colr[2]);
+		map->ceil = create_trgb(0, map->C_R, map->C_G, map->C_B);
+		printf("path_c: %d\n", map->ceil);
 	}
 	// printf("0: %s\n", tmp[0]);
 	// printf("1: %s\n", tmp[1]);
@@ -144,6 +157,6 @@ int		main(int argc, char **argv)
 		// else 
 		// 	return (printf("map error"));
 	}
-	// ft_window();
+	ft_window();
 	//draw_screen(all);
 }

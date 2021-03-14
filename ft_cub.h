@@ -24,8 +24,14 @@ typedef struct s_map_p
 	void *path_we;
 	void *path_ea;
 	void *path_sprite;
-	int *floor;
-	void *ceil;
+	int	floor;
+	int R;
+	int G;
+	int B;
+	int ceil;
+	int C_R;
+	int C_G;
+	int C_B;
 	void *next;
 
 }				t_map_p;
@@ -93,5 +99,6 @@ void parse(char *line, t_map_p *map);
 //void init_str(t_list *head);
 int	ft_mapsize(t_map_p *map);
 void ft_init(t_map_p *map);
+int		create_trgb(int t, int r, int g, int b);
 
 #endif
