@@ -4,32 +4,83 @@
 // {
 
 // }
+void            my_mlx_pixel_put(t_window *win, int x, int y, int color)
+{
+    char    *dst;
 
-// void draw_screen(t_all *all)
+    dst = win->addr + (y * win->line_length + x * (win->bits_per_pixel / 8));
+    *(unsigned int*)dst = color;
+}
+
+void draw_screen(t_map_p *map)
+{
+	void    *mlx;
+    void    *mlx_w;
+	t_point *point;
+	//t_window *win = all->win;
+
+	ft_bzero(&point, sizeof(t_point));
+	t_window *win = NULL;
+	win = malloc(sizeof(t_window));
+	ft_init_w(win);
+
+	point = malloc(sizeof(t_point));
+	ft_init_point(point);
+	//map->map_m = ft_calloc(size + 1, sizeof(char *));
+
+ 	mlx = mlx_init();
+    mlx_w = mlx_new_window(mlx, map->width, map->hight, "Oasis");
+	// win->img = mlx_new_image(win->mlx, map->width, map->hight);
+	// win->addr = mlx_get_data_addr(win->img, &win->bits_per_pixel, &win->line_length, &win->endian);
+	while (map->map_m[point->y])
+	{
+		point->x = 0;
+		while (map->map_m[point->x])
+		{
+			if (map->map_m[point->y][point->x] == '1')
+				//my_mlx_pixel_put(win, 5, 5, 0x00FF0000);
+				 mlx_pixel_put(mlx, mlx_w, point->x, point->y, 0xFFFFFF);
+			point->x++;
+		}
+		point->y++;
+	}
+	//ft_draw_player(all, all->plr);
+	//mlx_put_image_to_window(win->mlx, win->mlx_w, win->img, 0, 0);
+	//mlx_destroy_image(win->mlx, win->img);
+	mlx_loop(mlx);
+}
+
+
+// void	ft_draw_floorsky(t_window *win, t_map_p *map)
 // {
-// 	t_point point;
-// 	t_map_p *map;
-// 	t_window *win = all->win;
+// 	int x;
+// 	int y;
 
-// 	win->img = mlx_new_image(win->mlx, map->width, map->hight);
-// 	win->addr = mlx_get_data_addr(win->img, &win->bits_per_pixel, &win->line_length, &win->endian);
-// 	ft_bzero(&point, sizeof(t_point));
-// 	while (all->map[point.y])
+// 	x = 0;
+	
+// 	while (x < map->width)
 // 	{
-// 		point.x = 0;
-// 		while (all->map[point.x])
+// 		y = 0;
+// 		while (y < map->hight / 2)
 // 		{
-// 			if (all->map[point.y][point.x] == '1')
-// 				mlx_pixel_put(all->win->mlx, all->win->win, point.x, point.y, 0xFFFFFF);
-// 			point.x++;
+// 			win->img[y * map->width + x] = map->ceil;
+// 			y++;
 // 		}
-// 		point.y++;
+// 		x++;
 // 	}
-// 	//ft_draw_player(all, all->plr);
-// 	mlx_put_image_to_window(win->mlx, win->win, win->img, 0, 0);
-// 	//mlx_destroy_image(win->mlx, win->img);
+// 	x = 0;
+// 	while (x < map->width)
+// 	{
+// 		y = map->hight / 2;
+// 		while (y < map->hight)
+// 		{
+// 			win->img[y * map->width + x] = map->floor;
+// 			y++;
+// 		}
+// 		x++;
+// 	}
+	
 // }
-
 // int main(int argc, char **argv)
 // {
 // 	t_window	win;

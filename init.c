@@ -18,4 +18,23 @@ void ft_init(t_map_p *map)
 	map->C_R = 0;
 	map->C_G = 0;
 	map->C_B = 0;
+	map->map_m = NULL;
+}
+
+void ft_init_w(t_window *win)
+{
+	win->win = NULL;
+	win->mlx = NULL;
+	win->mlx_w = NULL;
+	win->img = 0;
+    win->addr = NULL;
+    win->bits_per_pixel = 0;
+    win->line_length = 0;
+    win->endian = 0;
+}
+
+void ft_init_point(t_point *point)
+{
+	point->x = 0;
+	point->y = 0;
 }

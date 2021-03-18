@@ -8,26 +8,28 @@
 //     *(unsigned int*)dst = color;
 // }
 
-int     ft_window(void)
+int     ft_window(t_map_p *map)
 {
     void    *mlx;
     void    *mlx_w;
     int     x;
     int y;
     //t_all *all = NULL;
+    //t_window *win = NULL;
+    //ft_init_w(win);
 
     x = 0;
     y = 0;
 
     mlx = mlx_init();
-    mlx_w = mlx_new_window(mlx, 1080, 1080, "Oasis");
+    mlx_w = mlx_new_window(mlx, map->width, map->hight, "Oasis");
     //img->img = mlx_new_image(mlx, 200, 200);
     //img->addr = mlx_get_data_addr(img->img, &img->bits_per_pixel, &img->line_length, &img->endian);
-    //draw_screen(all);
-    while (y < 10)
+    // draw_screen(map);
+    while (y < 100)
     {
         x = 0;
-        while (x < 10)
+        while (x < 100)
         {
             mlx_pixel_put(mlx, mlx_w, x, y, 0xFFFFFF);
             x++;

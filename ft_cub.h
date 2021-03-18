@@ -33,14 +33,16 @@ typedef struct s_map_p
 	int C_G;
 	int C_B;
 	void *next;
+	char **map_m; 
 
 }				t_map_p;
 
 typedef struct	s_window //  структура окна
 {
 	void	*mlx;
+	void	*mlx_w;
 	void	*win;
-	void	*img;
+	int	*img; // void??
     char    *addr;
     int     bits_per_pixel;
     int     line_length;
@@ -88,10 +90,12 @@ typedef struct	s_plr //структура для игрока и луча
 
 
 
-void	my_mlx_pixel_put(t_window *data, int x, int y, int color);
-char	**make_map(t_list **head, int size);
-int     ft_window(void);
-void	draw_screen(t_all *all);
+void	my_mlx_pixel_put(t_window *win, int x, int y, int color);
+//char	**make_map(t_list **head, int size);
+char	**make_map(t_list **head, t_map_p *map, int size);
+//int     ft_window(void);
+int     ft_window(t_map_p *map);
+void	draw_screen(t_map_p *map);
 void ft_init_w(t_window *win);
 void ft_init_point(t_point *point);
 void ft_init_all(t_all *all);
@@ -100,5 +104,8 @@ void parse(char *line, t_map_p *map);
 int	ft_mapsize(t_map_p *map);
 void ft_init(t_map_p *map);
 int		create_trgb(int t, int r, int g, int b);
+void ft_init_point(t_point *point);
+void ft_init_w(t_window *win);
+void	ft_draw_floorsky(t_window *win, t_map_p *map); // kill
 
 #endif
