@@ -150,19 +150,18 @@ int		main(int argc, char **argv)
 		// {
 			while (get_next_line(fd, &line) > 0)
 			{
-				if (*line != '1')
+				if (*line == '1' || *line == ' ' || *line == '\t')
 				{
-					parse(line, map);
-					//break ;
+					ft_lstadd_back(&head, ft_lstnew(line));
 				}
 				else
-					ft_lstadd_back(&head, ft_lstnew(line));
+					parse(line, map);
 				//ft_lstadd_back(&head, ft_lstnew(line));
 				// count++;
 				// line = NULL;
 			}
 			// close(fd);
-			// ft_lstadd_back(&head, ft_lstnew(line));
+			ft_lstadd_back(&head, ft_lstnew(line));
 			// count++;
 			//return (make_map(&head, ft_lstnew(line)));
 			make_map(&head, map, ft_lstsize(head));

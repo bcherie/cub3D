@@ -23,7 +23,7 @@ void ft_init(t_map_p *map)
 
 void ft_init_w(t_window *win)
 {
-	win->win = NULL;
+	//win->win = NULL;
 	win->mlx = NULL;
 	win->mlx_w = NULL;
 	win->img = 0;
@@ -37,4 +37,10 @@ void ft_init_point(t_point *point)
 {
 	point->x = 0;
 	point->y = 0;
+}
+
+void ft_init_scale(t_scale *mashtab)
+{
+	mashtab->one = 0;
+	mashtab->two = 0;
 }

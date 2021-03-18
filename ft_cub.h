@@ -7,6 +7,7 @@
 # include "libft/libft.h"
 # include "get_next_line/get_next_line.h"
 # include "mlx.h"
+#define SCALE 14
 
 typedef struct	s_app
 {
@@ -14,6 +15,13 @@ typedef struct	s_app
 	struct Node *next;
 
 }				t_app;
+
+typedef struct  s_scale
+{
+	int one;
+	int two;
+}				t_scale;
+
 
 typedef struct s_map_p
 {
@@ -41,8 +49,8 @@ typedef struct	s_window //  структура окна
 {
 	void	*mlx;
 	void	*mlx_w;
-	void	*win;
-	int	*img; // void??
+	//void	*win;
+	int		*img; // void??
     char    *addr;
     int     bits_per_pixel;
     int     line_length;
@@ -107,5 +115,6 @@ int		create_trgb(int t, int r, int g, int b);
 void ft_init_point(t_point *point);
 void ft_init_w(t_window *win);
 void	ft_draw_floorsky(t_window *win, t_map_p *map); // kill
+void ft_init_scale(t_scale *mashtab);
 
 #endif
