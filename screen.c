@@ -12,29 +12,32 @@ void            my_mlx_pixel_put(t_window *win, int x, int y, int color)
     *(unsigned int*)dst = color;
 }
 
-// void ft_scale_map(t_window *win, t_point *point)
-// {
-// 	// void    *mlx;
-//     // void    *mlx_w;
-// 	t_scale *mashtab = NULL;
-// 	mashtab = malloc(sizeof(t_scale));
-// 	ft_init_scale(mashtab);
+void ft_scale_map(t_window *win, t_point *point)
+{
+	// void    *mlx;
+    // void    *mlx_w;
+	t_scale *mashtab = NULL;
+	mashtab = malloc(sizeof(t_scale));
+	ft_init_scale(mashtab);
 
-// 	// mlx = mlx_init();
-//     // mlx_w = mlx_new_window(mlx, map->width, map->hight, "Oasis");
-// 	mashtab->one = (point->x + 1) * SCALE;
-// 	mashtab->two = (point->y + 1) * SCALE;
-// 	point->x *= SCALE;
-// 	point->y *= SCALE;
-// 	while (point->y < mashtab->one)
-// 	{
-// 		while (point->x < mashtab->two)
-// 			mlx_pixel_put(win->mlx, win->mlx_w, point->x++, point->y, 0xFFFFFF);
-// 		point->x -= SCALE;
-// 		point->y++;
-// 	}
-// 	//mlx_loop(mlx);
-// }
+	// mlx = mlx_init();
+    // mlx_w = mlx_new_window(mlx, map->width, map->hight, "Oasis");
+	mashtab->one = (point->x + 1) * SCALE;
+	mashtab->two = (point->y + 1) * SCALE;
+	point->x *= SCALE;
+	point->y *= SCALE;
+	while (point->y < mashtab->one)
+	{
+		while (point->x < mashtab->two)
+		{
+			mlx_pixel_put(win->mlx, win->mlx_w, point->x, point->y, 0xFFFFFF);
+			point->x++;
+		}
+		point->x -= SCALE;
+		point->y++;
+	}
+	//mlx_loop(mlx);
+}
 
 void draw_screen(t_map_p *map)
 {
@@ -54,23 +57,24 @@ void draw_screen(t_map_p *map)
 
  	win->mlx = mlx_init();
     win->mlx_w = mlx_new_window(win->mlx, map->width, map->hight, "Oasis");
-	// win->img = mlx_new_image(win->mlx, map->width, map->hight);
-	// win->addr = mlx_get_data_addr(win->img, &win->bits_per_pixel, &win->line_length, &win->endian);
+	//img = mlx_xpm_file_to_image();
+	win->img = mlx_new_image(win->mlx, map->width, map->hight);
+	win->addr = mlx_get_data_addr(win->img, &win->bits_per_pixel, &win->line_length, &win->endian);
 	while (map->map_m[point->y])
 	{
 		point->x = 0;
-		while (map->map_m[point->x])
+		while (map->map_m[point->y][point->x])
 		{
 			if (map->map_m[point->y][point->x] == '1')
-				//my_mlx_pixel_put(win, 5, 5, 0x00FF0000);
+				my_mlx_pixel_put(win, point->x, point->y, 0xFFFFFF);
 				//ft_scale_map(win, point); // масштаб карты
-				mlx_pixel_put(win->mlx, win->mlx_w, point->x, point->y, 0xFFFFFF);
+				//mlx_pixel_put(win->mlx, win->mlx_w, point->x, point->y, 0xFFFFFF);
 			point->x++;
 		}
 		point->y++;
 	}
-	//ft_draw_player(all, all->plr);
-	//mlx_put_image_to_window(win->mlx, win->mlx_w, win->img, 0, 0);
+	//ft_draw_player(all, all->plr); // отрисовка игрока
+	mlx_put_image_to_window(win->mlx, win->mlx_w, win->img, 0, 0);
 	//mlx_destroy_image(win->mlx, win->img);
 	mlx_loop(win->mlx);
 }

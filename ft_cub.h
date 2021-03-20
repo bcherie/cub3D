@@ -50,7 +50,7 @@ typedef struct	s_window //  структура окна
 	void	*mlx;
 	void	*mlx_w;
 	//void	*win;
-	int		*img; // void??
+	void		*img; // void??
     char    *addr;
     int     bits_per_pixel;
     int     line_length;
@@ -88,6 +88,11 @@ typedef struct	s_plr //структура для игрока и луча
 	float		start;
 	float		end;
 }				  t_plr;
+
+typedef struct	s_texture
+{
+	char *img;
+}				t_texture;
 
 // typedef struct s_list
 // {
