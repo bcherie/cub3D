@@ -26,7 +26,7 @@ void ft_init_w(t_window *win)
 	//win->win = NULL;
 	win->mlx = NULL;
 	win->mlx_w = NULL;
-	win->img = 0;
+	win->img_w = 0;
     win->addr = NULL;
     win->bits_per_pixel = 0;
     win->line_length = 0;
@@ -43,4 +43,17 @@ void ft_init_scale(t_scale *mashtab)
 {
 	mashtab->one = 0;
 	mashtab->two = 0;
+}
+
+void ft_init_tex(t_texture *tex)
+{
+// void	*mlx_img;
+	// void	*mlx_w_ing;
+	tex->img = NULL;
+	tex->img_width = 0;
+	tex->img_height = 0;
+	tex->img_addr = 0;
+	tex->bpp = 0;
+	tex->llength = 0;
+	tex->end = 0;
 }

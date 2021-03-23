@@ -7,7 +7,7 @@
 # include "libft/libft.h"
 # include "get_next_line/get_next_line.h"
 # include "mlx.h"
-#define SCALE 14
+#define SCALE 40
 
 typedef struct	s_app
 {
@@ -50,13 +50,16 @@ typedef struct	s_window //  структура окна
 	void	*mlx;
 	void	*mlx_w;
 	//void	*win;
-	void		*img; // void??
+	void	*img_w;
+	int		img_width;
+	int		img_height;
     char    *addr;
     int     bits_per_pixel;
     int     line_length;
     int     endian;
 
 }				t_window;
+
 
 typedef struct		s_all
 {
@@ -91,7 +94,15 @@ typedef struct	s_plr //структура для игрока и луча
 
 typedef struct	s_texture
 {
-	char *img;
+	// void	*mlx_img;
+	// void	*mlx_w_ing;
+	void	*img;
+	int		img_width;
+	int		img_height;
+    char    *img_addr;
+    int     bpp;
+    int     llength;
+    int     end;
 }				t_texture;
 
 // typedef struct s_list
@@ -103,7 +114,7 @@ typedef struct	s_texture
 
 
 
-void	my_mlx_pixel_put(t_window *win, int x, int y, int color);
+void            my_mlx_pixel_put(t_window *win, int x, int y, int color);
 //char	**make_map(t_list **head, int size);
 char	**make_map(t_list **head, t_map_p *map, int size);
 //int     ft_window(void);
@@ -121,5 +132,6 @@ void ft_init_point(t_point *point);
 void ft_init_w(t_window *win);
 void	ft_draw_floorsky(t_window *win, t_map_p *map); // kill
 void ft_init_scale(t_scale *mashtab);
+void ft_init_tex(t_texture *tex);
 
 #endif

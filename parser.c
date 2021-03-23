@@ -108,6 +108,7 @@ void parse(char *line, t_map_p *map)
 	// printf("2: %s\n", tmp[2]);
 }
 
+
 char	**make_map(t_list **head, t_map_p *map, int size)
 {
 	//t_map_p *map;
@@ -150,7 +151,7 @@ int		main(int argc, char **argv)
 		// {
 			while (get_next_line(fd, &line) > 0)
 			{
-				if (*line == '1' || *line == ' ' || *line == '\t')
+				if (*line == '1' || *line == ' ' || *line == ' ')
 				{
 					ft_lstadd_back(&head, ft_lstnew(line));
 				}
