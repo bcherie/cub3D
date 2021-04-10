@@ -12,13 +12,13 @@ void ft_init_w(t_window *win)
 
 }
 
-void ft_init_all(t_all *all)
-{
-	t_window		*win;
-	win = NULL;
-	//t_plr			*plr;
-	all->map = NULL;
-}
+// void ft_init_all(t_all *all)
+// {
+// 	t_window		*win;
+// 	win = NULL;
+// 	//t_plr			*plr;
+// 	all->map = NULL;
+// }
 
 void ft_init_point(t_point *point) // структура для точки
 {
