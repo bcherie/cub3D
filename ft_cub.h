@@ -9,6 +9,10 @@
 # include "get_next_line/get_next_line.h"
 # include "mlx.h"
 #define SCALE 40
+#define W 13
+#define S 1
+#define D 2
+#define A 0
 // #define img_width 64
 // #define img_height 64
 
@@ -73,6 +77,8 @@ typedef struct s_ray
     double step;
     double texpos;
 	int texy;
+	//int texwidth;
+	//int texheight;
 	int	color;
 	double			*zbuff;
 }				t_ray;
@@ -114,6 +120,7 @@ typedef struct	s_texture
     int     bpp;
     int     llength;
     int     end;
+	int		color;
 }				t_texture;
 
 typedef struct		s_all
@@ -122,6 +129,7 @@ typedef struct		s_all
 	t_plr			*player;
 	t_map_p			*map;
 	t_ray			rc;
+	t_texture		data;
 	t_texture		no;
 	t_texture		so;
 	t_texture		ea;
@@ -131,8 +139,9 @@ typedef struct		s_all
 	t_texture		floor;
 	t_texture		ceil;
 	double			moveSpeed;
-	double			speed;
+	double			rorate;
 	int				**buf;
+	int				flag;
 	//t_plr			*plr;
 	//char			**map_m;
 	//int		texture[8][img_height * img_width];

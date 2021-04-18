@@ -1,5 +1,51 @@
 #include "ft_cub.h"
 
+void ft_draw_textures(t_all *all, int x)
+{
+	//int x;
+	int y; 
+
+	y = 0;
+	while (y <= all->rc.drawend)
+    {
+		all->rc.color = *(unsigned int*)(all->current.img_addr + (all->rc.texy * \
+ 		all->current.llength + all->rc.texx * \
+ 		(all->current.bpp / 8)));
+        x = 0;
+        while (x <= all->rc.drawstart)
+        {
+			my_mlx_pixel_put(all, x, all->rc.drawstart, all->rc.color);
+            //mlx_put_image_to_window(all->win->mlx, all->win->mlx_w, all->current.img, x, y);
+            x += all->current.img_width;
+        }
+        y += all->current.img_height;
+    }
+}
+// void ft_draw_textures(t_all *all, int x)
+// {
+// 	if (all->rc.side == 0) 
+// 		all->rc.wallx = all->player->y + all->rc.perpwalldist * all->rc.raydiry;
+//     else          
+// 		all->rc.wallx = all->player->x + all->rc.perpwalldist * all->rc.raydirx;
+//     all->rc.wallx -= floor((all->rc.wallx));
+// 	all->rc.texx = (int)(all->rc.wallx * (double)(all->current.img_width));
+// 	if(all->rc.side == 0 && all->rc.raydirx > 0) 
+// 		all->rc.texx = all->current.img_width - all->rc.texx - 1;
+// 	if(all->rc.side == 1 && all->rc.raydiry < 0)
+// 		all->rc.texx = all->current.img_width - all->rc.texx - 1;
+// 	all->rc.step = 1.0 * all->current.img_height / all->rc.lineheight;
+// 	all->rc.texpos = (all->rc.drawstart - all->map->hight / 2 + all->rc.lineheight / 2) * all->rc.step;
+// 	while (all->rc.drawstart < all->rc.drawend)
+// 	{
+// 		all->rc.texy = (int)all->rc.texpos & (all->current.img_height - 1);
+// 		all->rc.color = *(unsigned int*)(all->current.img_addr + (all->rc.texy * \
+// 		all->current.llength + all->rc.texx * \
+// 		(all->current.bpp / 8)));
+// 		my_mlx_pixel_put(all, x, all->rc.drawstart, all->rc.color);
+// 		all->rc.texpos += all->rc.step;
+// 		all->rc.drawstart++;
+// 	}
+// }
 
 // static void	draw(t_all *all)
 // {
@@ -52,18 +98,18 @@
 // 	}
 // }
 
-// звпись текстур в рабочую:
-// static void	ft_texture(t_all *all)
-// {
-// 	if (all->rc.side == 0 && all->rc.raydirx > 0)
-// 		all->current = all->ea;
-// 	if (all->rc.side == 0 && all->rc.raydirx < 0)
-// 		all->current = all->we;
-// 	if (all->rc.side == 1 && all->rc.raydiry > 0)
-// 		all->current = all->so;
-// 	if (all->rc.side == 1 && all->rc.raydiry < 0)
-// 		all->current = all->no;
-// }
+//звпись текстур в рабочую:
+static void	ft_texture(t_all *all)
+{
+	if (all->rc.side == 0 && all->rc.raydirx > 0)
+		all->current = all->ea;
+	if (all->rc.side == 0 && all->rc.raydirx < 0)
+		all->current = all->we;
+	if (all->rc.side == 1 && all->rc.raydiry > 0)
+		all->current = all->so;
+	if (all->rc.side == 1 && all->rc.raydiry < 0)
+		all->current = all->no;
+}
 
 static void	ft_set_wall(t_all *all, int x)
 {
@@ -73,48 +119,112 @@ static void	ft_set_wall(t_all *all, int x)
 	//Calculate height of line to draw on screen:
 	all->rc.lineheight = (int)(all->map->hight / all->rc.perpwalldist);
 	//calculate lowest and highest pixel to fill in current stripe:
-	all->rc.drawstart = -all->rc.lineheight / 2 + all->map->hight / 2;
+	//all->rc.drawstart = -all->rc.lineheight / 2 + all->map->hight / 2;
+	all->rc.drawstart = all->map->hight / 2 - all->rc.lineheight / 2;
     if(all->rc.drawstart < 0) 
 		all->rc.drawstart = 0;
     all->rc.drawend = all->rc.lineheight / 2 + all->map->hight / 2;
+	// think about it
     if(all->rc.drawend >= all->map->hight)
 		all->rc.drawend = all->map->hight - 1;
-	
+	//draw ceil
 	while (i < all->rc.drawstart)
 	{
-		my_mlx_pixel_put(all, x, i, 0x00FFFFFF);
+		//my_mlx_pixel_put(all, x, i, 0x00FFFFFF);
+		my_mlx_pixel_put(all, x, i, all->map->ceil);
 		i++;
 	}
+	//draw walls 
+	// while (i < all->rc.drawend)
+	// {
+	// 	if(all->rc.side == 1)
+	// 	{
+	// 		if(all->rc.raydiry < 0)
+	// 			my_mlx_pixel_put(all, x, i, 0x00FF0000);
+	// 		else if(all->rc.raydiry > 0)
+	// 			my_mlx_pixel_put(all, x, i, 0x0000FF00);
+	// 	}
+	// 	else if (all->rc.side == 0)
+	// 	{
+	// 		if(all->rc.raydirx > 0)
+	// 			my_mlx_pixel_put(all, x, i, 0x000000FF);
+	// 		else if(all->rc.raydirx < 0)
+	// 			my_mlx_pixel_put(all, x, i, 0x00FFFF00);
+	// 	}
+	// 	i++;
+	// }
+	
+	//draw textures:
+	ft_texture(all);
+	if (all->rc.side == 0) 
+		all->rc.wallx = all->player->y + all->rc.perpwalldist * all->rc.raydiry;
+    else          
+		all->rc.wallx = all->player->x + all->rc.perpwalldist * all->rc.raydirx;
+    all->rc.wallx -= floor((all->rc.wallx));
+	//x coordinate on the texture
+	all->rc.texx = (int)(all->rc.wallx * (double)(all->current.img_width));
+	if(all->rc.side == 0 && all->rc.raydirx > 0)
+		all->rc.texx = all->current.img_width - all->rc.texx - 1;
+	if(all->rc.side == 1 && all->rc.raydiry < 0)
+		all->rc.texx = all->current.img_width - all->rc.texx - 1;
+	// ft_texture(all); // write func for load textures
+	// ft_draw_wall(all, x);
+	all->rc.step = 1.0 * all->current.img_height / all->rc.lineheight;
+	all->rc.texpos = (all->rc.drawstart - all->map->hight / 2 + all->rc.lineheight / 2) * all->rc.step;
+	//ft_draw_textures(all, x);
+	// while (i < all->rc.drawend)
+	// {
+	// 	all->rc.color = *(unsigned int*)(all->current.img_addr + (all->rc.texy * \
+	// 	all->current.llength + all->rc.texx * \
+	// 	(all->current.bpp / 8)));
+	// 	if(all->rc.side == 1)
+	// 	{
+	// 		if(all->rc.raydiry < 0)
+	// 			my_mlx_pixel_put(all, x, all->rc.drawstart, all->rc.color);
+	// 		else if(all->rc.raydiry > 0)
+	// 			my_mlx_pixel_put(all, x, all->rc.drawstart, all->rc.color);
+	// 	}
+	// 	else if (all->rc.side == 0)
+	// 	{
+	// 		if(all->rc.raydirx > 0)
+	// 			my_mlx_pixel_put(all, x, all->rc.drawstart, all->rc.color);
+	// 		else if(all->rc.raydirx < 0)
+	// 			my_mlx_pixel_put(all, x, all->rc.drawstart, all->rc.color);
+	// 	}
+	// 	i++;
+	// }
+	//variant tex:
 	while (i < all->rc.drawend)
 	{
+		all->rc.texy = (int)all->rc.texpos & (all->current.img_height - 1);
+		all->rc.color = *(unsigned int*)(all->current.img_addr + (all->rc.texy * \
+		all->current.llength + all->rc.texx * \
+		(all->current.bpp / 8)));
 		if(all->rc.side == 1)
 		{
 			if(all->rc.raydiry < 0)
-				my_mlx_pixel_put(all, x, i, 0x00FF0000);
+				my_mlx_pixel_put(all, x, i, all->rc.color);
 			else if(all->rc.raydiry > 0)
-				my_mlx_pixel_put(all, x, i, 0x0000FF00);
+				my_mlx_pixel_put(all, x, i, all->rc.color);
 		}
 		else if (all->rc.side == 0)
 		{
 			if(all->rc.raydirx > 0)
-				my_mlx_pixel_put(all, x, i, 0x000000FF);
+				my_mlx_pixel_put(all, x, i, all->rc.color);
 			else if(all->rc.raydirx < 0)
-				my_mlx_pixel_put(all, x, i, 0x00FFFF00);
+				my_mlx_pixel_put(all, x, i, all->rc.color); // не работает западная текстура
 		}
+		all->rc.texpos += all->rc.step;
 		i++;
 	}
+
+	//draw floor
 	while (i < all->map->hight)
 	{
-		my_mlx_pixel_put(all, x, i, 0x00FFFFFF);
+		//my_mlx_pixel_put(all, x, i, 0x00FFFFFF);
+		my_mlx_pixel_put(all, x, i, all->map->floor);
 		i++;
 	}
-    // if (all->rc.side == 0) 
-	// 	all->rc.wallx = all->player->y + all->rc.perpwalldist * all->rc.raydiry;
-    // else          
-	// 	all->rc.wallx = all->player->x + all->rc.perpwalldist * all->rc.raydirx;
-    // all->rc.wallx -= floor((all->rc.wallx));
-	// ft_texture(all); // write func for load textures
-	// ft_draw_wall(all, x);
 }
 
 static void	ft_dda(t_all *all)
@@ -198,7 +308,7 @@ void		ft_cast_ray(t_all *all)
 		//all->rc.zbuff[x] = all->rc.perpwalldist;
 		x++;
 	}
-	mlx_put_image_to_window(all->win->mlx, all->win->mlx_w, all->current.img, 0, 0);
+	mlx_put_image_to_window(all->win->mlx, all->win->mlx_w, all->data.img, 0, 0);
 	//draw(all);
 }
 
@@ -259,40 +369,41 @@ void ft_init_plr(t_map_p *map, t_plr *player)
 
 int keypress(int key, t_all *all)
 {
-	all->speed = 0.5;
+	all->rorate = 0.5;
+	all->moveSpeed = 0.05;
     //move forward if no wall in front of you
-    if (key == 13)
+    if (key == W)
     {
       if(all->map->map_m[(int)(all->player->y + all->player->dir_y * 0.5)][(int)(all->player->x)] == '0') all->player->y += all->player->dir_y * 0.5;
       if(all->map->map_m[(int)(all->player->y)][(int)(all->player->x + all->player->dir_x * 0.5)] == '0') all->player->x += all->player->dir_x * 0.5;
     }
     //move backwards if no wall behind you
-    if (key == 1)
+    if (key == S)
     {
       if(all->map->map_m[(int)(all->player->y - all->player->dir_y * 0.5)][(int)(all->player->x)] == '0') all->player->y -= all->player->dir_y * 0.5;
       if(all->map->map_m[(int)(all->player->y)][(int)(all->player->x - all->player->dir_x * 0.5)] == '0') all->player->x -= all->player->dir_x * 0.5;
     }
     //rotate to the right
-    if (key == 0)
+    if (key == D)
     {
       //both camera direction and camera plane must be rotated
       double oldDirX = all->player->dir_x;
-      all->player->dir_x = all->player->dir_x * cos(-1.2) - all->player->dir_y * sin(-all->speed);
-      all->player->dir_y = oldDirX * sin(-all->speed) + all->player->dir_y * cos(-all->speed);
+      all->player->dir_x = all->player->dir_x * cos(-all->rorate) - all->player->dir_y * sin(-all->rorate);
+      all->player->dir_y = oldDirX * sin(-all->rorate) + all->player->dir_y * cos(-all->rorate);
       double oldPlaneX = all->player->plane_x;
-      all->player->plane_x = all->player->plane_x * cos(-all->speed) - all->player->plane_y * sin(-all->speed);
-      all->player->plane_y = oldPlaneX * sin(-all->speed) + all->player->plane_y * cos(-all->speed);
+      all->player->plane_x = all->player->plane_x * cos(-all->rorate) - all->player->plane_y * sin(-all->rorate);
+      all->player->plane_y = oldPlaneX * sin(-all->rorate) + all->player->plane_y * cos(-all->rorate);
     }
     //rotate to the left
-    if (key == 2)
+    if (key == A)
     {
       //both camera direction and camera plane must be rotated
       double oldDirX = all->player->dir_x;
-      all->player->dir_x = all->player->dir_x * cos(all->speed) - all->player->dir_y * sin(all->speed);
-      all->player->dir_y = oldDirX * sin(all->speed) + all->player->dir_y * cos(all->speed);
+      all->player->dir_x = all->player->dir_x * cos(all->rorate) - all->player->dir_y * sin(all->rorate);
+      all->player->dir_y = oldDirX * sin(all->rorate) + all->player->dir_y * cos(all->rorate);
       double oldPlaneX = all->player->plane_x;
-      all->player->plane_x = all->player->plane_x * cos(all->speed) - all->player->plane_y * sin(all->speed);
-      all->player->plane_y = oldPlaneX * sin(all->speed) + all->player->plane_y * cos(all->speed);
+      all->player->plane_x = all->player->plane_x * cos(all->rorate) - all->player->plane_y * sin(all->rorate);
+      all->player->plane_y = oldPlaneX * sin(all->rorate) + all->player->plane_y * cos(all->rorate);
     }
 	ft_cast_ray(all);
 	return (0);
