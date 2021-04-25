@@ -15,7 +15,7 @@ static void		ft_set_tex(t_all *all)
 		exit(0);
 	}
 	all->so.img_addr = mlx_get_data_addr(all->so.img, &all->so.bpp, &all->so.llength, &all->so.end);
-	if (!(all->ea.img = mlx_xpm_file_to_image(all->win->mlx, all->map->path_ea, &all->so.img_width, &all->so.img_height)))
+	if (!(all->ea.img = mlx_xpm_file_to_image(all->win->mlx, all->map->path_ea, &all->ea.img_width, &all->ea.img_height)))
 	{
 		printf("Error\nInvalid texture path");
 		exit(0);
@@ -79,64 +79,76 @@ void parse(char *line, t_all *all)
 {
 	int i;
 	int j;
+	static int k;
 
 	j = 0;
 	i = 0;
+	k = 0;
+
 	char **tmp;
 	//char **colr;
 	check_zap(line);
 	printf("line: %s", line);
 	j = words_count(line, ' ');
 	tmp = ft_split(&line[i], ' ');
+	// printf("k: %d\n", k);
 	if (line[i] == 'R')
 	{
-		all->flag = 1;
+		all->flag += 1;
 		all->map->width = ft_atoi(tmp[1]);
 		all->map->hight = ft_atoi(tmp[2]);
 		printf("width: %d\n", all->map->width);
 		printf("hight: %d\n", all->map->hight);
-		if (j > 3)
-			printf("Error: wrong spec\n");
+		if (j != 3)
+			printf("1_Error: wrong spec\n");
+		if (all->map->width < 0 || all->map->hight < 0)
+			printf("1_Error: wrong resolution\n");
 	}
 	else if (line[i] == 'N' && line[++i] == 'O')
 	{
-		all->flag = 2;
+		if (j != 2)
+			printf("2_Error: wrong spec\n");
+		all->flag += 1;
 		all->map->path_no = tmp[1];
 		printf("path_no: %s\n", all->map->path_no);
 	}
 	else if (ft_strnstr(line, "SO", ft_strlen(line)))
 	{
-		all->flag = 3;
+		if (j != 2)
+			printf("3_Error: wrong spec\n");
+		all->flag += 1;
 		all->map->path_so = tmp[1];
 		printf("path_so: %s\n", all->map->path_so);
 	}
 	else if (line[i] == 'W' && line[++i] == 'E')
 	{
-		all->flag = 4;
+		if (j != 2)
+			printf("4_Error: wrong spec\n");
+		all->flag += 1;
 		all->map->path_we = tmp[1];
 		printf("path_we: %s\n", all->map->path_we);	
 	}
 	else if (line[i] == 'E' && line[++i] == 'A')
 	{
-		all->flag = 5;
+		if (j != 2)
+			printf("5_Error: wrong spec\n");
+		all->flag += 1;
 		all->map->path_ea = tmp[1];
 		printf("path_ea: %s\n", all->map->path_ea);
 	}
 	else if (ft_strnstr(line, "S ", ft_strlen(line)))
 	{
-		all->flag = 6;
+		if (j != 2)
+			printf("6_Error: wrong spec\n");
+		all->flag += 1;
 		all->map->path_sprite = tmp[1];
 		printf("path_s: %s\n", all->map->path_sprite);
 	}
 	else if (line[i] == 'F' && line[++i] == ' ')
 	{
-		all->flag = 7;
-		// colr = ft_split(tmp[1], ',');
-		// all->map->R = ft_atoi(colr[0]);
-		// all->map->G = ft_atoi(colr[1]);
-		// all->map->B = ft_atoi(colr[2]);
-		// if (tmp[1])
-		// 		printf("Error\nError: it's not digit");
+		if (j != 4)
+			printf("7_Error: wrong spec\n");
+		all->flag += 1;
 		all->map->R = ft_atoi(tmp[1]);
 		all->map->G = ft_atoi(tmp[2]);
 		all->map->B = ft_atoi(tmp[3]);
@@ -151,12 +163,9 @@ void parse(char *line, t_all *all)
 	}
 	else if (line[i] == 'C')
 	{
+		if (j != 4)
+			printf("8_Error: wrong spec\n");
 		all->flag = 8;
-		//map->ceil = tmp[1];
-		// colr = ft_split(tmp[1], ',');
-		// all->map->C_R = ft_atoi(colr[0]);
-		// all->map->C_G = ft_atoi(colr[1]);
-		// all->map->C_B = ft_atoi(colr[2]);
 		all->map->C_R = ft_atoi(tmp[1]);
 		all->map->C_G = ft_atoi(tmp[2]);
 		all->map->C_B = ft_atoi(tmp[3]);
@@ -169,8 +178,45 @@ void parse(char *line, t_all *all)
 		all->map->ceil = create_trgb(0, all->map->C_R, all->map->C_G, all->map->C_B);
 		printf("path_c: %d\n", all->map->ceil);
 	}
+	// while (*line)
+	// {
+	// 	if (*line == '\0')
+	// 		k += 1; 
+	// 	// if((tmp[0] == "R") > 1)
+	// 	// 	printf("Error: wrong dub_spec\n");
+	// 	// if (k != 8)
+	// 	// 	printf("Error: wrong col_spec\n");
+	// 	(*line)++;
+	// 	// k++;
+	// }
 }
 
+// write func for allocateion memory for sprites:
+// void ft_memory_sp(t_all *all)
+// {
+// 	all->mass_sp = (int **)ft_calloc((all->num_sp + 1), sizeof(int **));
+
+// }
+
+void ft_count_sprites(t_all *all)
+{
+	int i;
+	int j;
+
+	i = 0;
+	all->num_sp = 0;
+	while (all->map->map_m[i])
+	{
+		j = 0;
+		while (all->map->map_m[i][j])
+		{
+			if (all->map->map_m[i][j] == '2')
+				all->num_sp += 1;
+			j++;
+		}
+		i++;
+	}
+}
 
 // char	**make_map(t_list **head, t_map_p *map, int size)
 char	**make_map(t_list **head, t_all *all, int size)
@@ -192,7 +238,6 @@ char	**make_map(t_list **head, t_all *all, int size)
 	i = -1;
 	while (all->map->map_m[++i])
 		ft_putendl_fd(all->map->map_m[i]);
-
 	// while (map->map_m)
 	//printf("map: %s", map->map_m[0]);
 	return (all->map->map_m);
@@ -211,16 +256,18 @@ int		main(int argc, char **argv)
 	// ft_bzero(all, sizeof(t_all));
 	// all->map = malloc(sizeof(t_map_p));
 	// ft_init(all);
-	if (argc < 2 || argc > 3)
+	// all->num_sp = 0;
+	if (argc < 2)
 	{
 		printf("Error\nWrong arguement number");
 		exit(0);
 	}
-	// if (argc == 3)
-	// {
-	// 	if (ft_strncmp(argv[2], "--save", ft_strlen("--save")))
-	// 		all->map->save = 1;
-	// }
+	if (argc == 3)
+	{
+		bmp_save(all, &argv[2]);
+		// if (ft_strncmp(argv[2], "--save", ft_strlen("--save")))
+		// 	all->map->save = 1;
+	}
 	int		fd = open(argv[1], O_RDONLY);
 	char	*line = NULL;	
 	t_list	*head = NULL; // структура для записи спецификаторов
@@ -246,22 +293,18 @@ int		main(int argc, char **argv)
 			if (all->flag < 8 || all->flag > 8)
 				printf("Error\nError: Don't have spec\n");
 			make_map(&head, all, ft_lstsize(head));
-			//ft_draw_floorsky(win, map);
 		}
 		else 
 			printf("Error: map's name error\n");
 	}
+	ft_count_sprites(all);
 	ft_init_plr(all->map, all->player);
 	all->win->mlx = mlx_init();
 	ft_set_tex(all);
     all->win->mlx_w = mlx_new_window(all->win->mlx, all->map->width, all->map->hight, "Oasis");
 	all->data.img = mlx_new_image(all->win->mlx, all->map->width, all->map->hight);
-	//printf("new_img: %p", all->current.img);
-	//tex->img = mlx_xpm_file_to_image(win->mlx, "/Users/bcherie/cub3D/textures/mossy.xpm", &win->img_width, &win->img_height);
 	all->data.img_addr = mlx_get_data_addr(all->data.img, &all->data.bpp, &all->data.llength, &all->data.end);
 	mlx_hook(all->win->mlx_w, 2, 1L<<0, keypress, all);
 	ft_cast_ray(all);
-	//mlx_put_image_to_window(all->win->mlx, all->win->mlx_w, all->current.img, 0, 0);
-	//draw_screen(all);
 	mlx_loop(all->win->mlx);
 }

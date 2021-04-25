@@ -13,6 +13,12 @@
 #define S 1
 #define D 2
 #define A 0
+#define ESC 53
+# define DIV 1
+# define DIV 1
+# define MOVE 0.0
+# define TEX_WIDTH 64
+# define TEX_HEIGHT 64
 // #define img_width 64
 // #define img_height 64
 
@@ -123,6 +129,32 @@ typedef struct	s_texture
 	int		color;
 }				t_texture;
 
+typedef struct	s_sprites
+{
+	double x;
+	double y;
+	// double s_width;
+	// double	s_height;
+	double	dist;
+	int		order;
+}				t_sprites;
+
+typedef struct		s_pair
+{
+	double	first;
+	int		second;
+}					t_pair;
+
+typedef struct		s_bmp
+{
+	int				fd;
+	int				size;
+	int				h2;
+	unsigned char	head[54];
+	int				clr;
+	int				offset;
+}					t_bmp;
+
 typedef struct		s_all
 {
 	t_window		*win;
@@ -138,10 +170,29 @@ typedef struct		s_all
 	t_texture		current;
 	t_texture		floor;
 	t_texture		ceil;
+	t_sprites		*sprites;
+	//t_pair	*sprite;
 	double			moveSpeed;
 	double			rorate;
 	int				**buf;
 	int				flag;
+	int				num_sp;
+	//int				tmp_order;
+	double			**mass_sp;
+	double			transfx;
+	double			transfy;
+	int				dr_startx;
+	int				dr_starty;
+	int				dr_drendx;
+	int				dr_drendy;
+	int				spritescreen_x;
+	double			*zBuffer;
+	double			sp_x;
+	double			sp_y;
+	int mvscreen;
+	t_bmp			bmp;
+	// double	dist;
+	// int		order;
 	//t_plr			*plr;
 	//char			**map_m;
 	//int		texture[8][img_height * img_width];
@@ -176,5 +227,16 @@ void		ft_cast_ray(t_all *all);
 void ft_init_plr(t_map_p *map, t_plr *player);
 void ft_inint_plr_str(t_plr *player);
 int keypress(int key, t_all *all);
+
+void sprites_main(t_all *all, int x);
+void draw_sp(t_all *all, int x);
+void ft_clac_hw_sp(t_all *all);
+void ft_sp(t_all *all, int i);
+void sprite_sort(int *order, double *dist, int amount);
+void	sort_order(t_pair *orders, int amount);
+void ft_coord_sprite(t_all *all);
+void ft_count_sprites(t_all *all);
+void    bmp_save(t_all *all, char *argv);
+void		sprite(t_all *all, int x);
 
 #endif

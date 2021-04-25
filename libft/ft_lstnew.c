@@ -2,12 +2,12 @@
 
 t_list	*ft_lstnew(void *content)
 {
-	t_list *elem;
+	t_list *new;
 
-	elem = (t_list*)malloc(sizeof(t_list));
-	if (!elem)
+	new = (t_list*)malloc(sizeof(t_list));
+	if (!new)
 		return (NULL);
-	elem->content = content;
-	elem->next = NULL;
-	return (elem);
+	new->content = content;
+	new->next = NULL;
+	return (new);
 }

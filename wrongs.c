@@ -13,3 +13,12 @@ void ft_wrongs(int argc, char **argv, t_all *all)
 		exit(0);
 	}
 }
+
+void ft_map_res_fc()
+{
+    if ((line[i] == 'C' || line[i] == 'F') && j != 4)
+    {
+	    printf("Error: wrong spec\n");
+        exit(0);
+    }
+}

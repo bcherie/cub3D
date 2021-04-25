@@ -1,15 +1,13 @@
 #include "libft.h"
 
-// Counts the number of elements in a list
-
-int	ft_lstsize(t_list *lst)
+int	ft_lstsize(t_list *list)
 {
 	int	i;
 
 	i = 0;
-	while (lst)
+	while (list)
 	{
-		lst = lst->next;
+		list = list->next;
 		i++;
 	}
 	return (i);
