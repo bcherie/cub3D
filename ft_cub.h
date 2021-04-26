@@ -189,7 +189,13 @@ typedef struct		s_all
 	double			*zBuffer;
 	double			sp_x;
 	double			sp_y;
+	int				s_texx;
+	int				s_texy;
+	int				d;
+	int				s_clr;
 	int mvscreen;
+	int	sp_width;
+	int	sp_heigth;
 	t_bmp			bmp;
 	// double	dist;
 	// int		order;

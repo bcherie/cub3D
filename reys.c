@@ -242,51 +242,53 @@ void		sprite(t_all *all, int x)
 		//parameters for scaling and moving the sprites
 		all->mvscreen = (int)(MOVE / all->transfy);
 
-		all->sp.img_height = (int)fabs((all->map->hight / all->transfy) / 1);
+		all->sp_heigth = (int)fabs((all->map->hight / all->transfy) / 1);
 			//calculate lowest and highest pixel to fill in current stripe
-		all->dr_starty = -all->sp.img_height / 2 + all->map->hight / 2 + all->mvscreen;
+		all->dr_starty = -all->sp_heigth / 2 + all->map->hight / 2 + all->mvscreen;
 		if(all->dr_starty < 0)
 			all->dr_starty = 0;
-		all->dr_drendy = all->sp.img_height / 2 + all->map->hight / 2 + all->mvscreen;
+		all->dr_drendy = all->sp_heigth / 2 + all->map->hight / 2 + all->mvscreen;
 		if(all->dr_drendy >= all->map->hight)
 			all->dr_drendy = all->map->hight - 1;
 
 		//calculate width of the sprite
-		all->sp.img_width = (int)fabs((all->map->hight / all->transfy) / 1);
-		all->dr_startx = -all->sp.img_width / 2 + all->spritescreen_x;
+		all->sp_width = (int)fabs((all->map->hight / all->transfy) / 1);
+		all->dr_startx = -all->sp_width / 2 + all->spritescreen_x;
 		if(all->dr_startx < 0)
 			all->dr_startx = 0;
-		all->dr_drendx = all->sp.img_width / 2 + all->spritescreen_x;
+		all->dr_drendx = all->sp_width / 2 + all->spritescreen_x;
 		if(all->dr_drendx >= all->map->width)
 			all->dr_drendx = all->map->width - 1;
 
+		x = all->dr_startx;
 		// y = 0;
 		//int stripe;
-		int y = all->dr_starty;
-		while (y <= all->dr_drendy)
-    	{
-			int d = (y - all->mvscreen) * 256 - all->map->hight * 128 + all->sp.img_height * 128; //256 and 128 factors to avoid floats
-			int s_texy = ((d * TEX_HEIGHT) / all->sp.img_height) / 256;
-			//x = 0;
-			//x = all->dr_startx;
-			while (x <= all->dr_drendx)
-			{
-				int s_texx = (int)((256 * (x - (-all->sp.img_width / 2 + all->spritescreen_x)) * TEX_WIDTH / all->sp.img_width) / 256);
-				int color = *(unsigned int*)(all->sp.img_addr + (s_texy * \
-				all->sp.llength + s_texx * \
-				(all->sp.bpp / 8)));
-				if(all->transfy > 0 && x > 0 && x < all->map->width && all->transfy < all->zBuffer[x])
-					my_mlx_pixel_put(all, x, y, color);
-				x++;
-			}
-			y++;
-    	}
+		draw_sp(all, x);
+		// int y = all->dr_starty;
+		// while (y <= all->dr_drendy)
+    	// {
+		// 	int d = (y - all->mvscreen) * 256 - all->map->hight * 128 + all->sp.img_height * 128; //256 and 128 factors to avoid floats
+		// 	int s_texy = ((d * TEX_HEIGHT) / all->sp.img_height) / 256;
+		// 	//x = 0;
+		// 	//x = all->dr_startx;
+		// 	while (x <= all->dr_drendx)
+		// 	{
+		// 		int s_texx = (int)((256 * (x - (-all->sp.img_width / 2 + all->spritescreen_x)) * TEX_WIDTH / all->sp.img_width) / 256);
+		// 		int color = *(unsigned int*)(all->sp.img_addr + (s_texy * \
+		// 		all->sp.llength + s_texx * \
+		// 		(all->sp.bpp / 8)));
+		// 		if(all->transfy > 0 && x > 0 && x < all->map->width && all->transfy < all->zBuffer[x])
+		// 			my_mlx_pixel_put(all, x, y, color);
+		// 		x++;
+		// 	}
+		// 	y++;
+    	// }
 		// int y;
 		// int stripe = all->dr_startx;
-		// while (stripe < all->dr_drendx)
+		// while (x < all->dr_drendx)
 		// {
-		// 	int s_texx = (int)((256 * (stripe - (-all->sp.img_width / 2 + all->spritescreen_x)) * TEX_WIDTH / all->sp.img_width) / 256);
-		// 	if(all->transfy > 0 && stripe > 0 && stripe < all->map->width && all->transfy < all->zBuffer[stripe])
+		// 	int s_texx = (int)((256 * (x - (-all->sp.img_width / 2 + all->spritescreen_x)) * TEX_WIDTH / all->sp.img_width) / 256);
+		// 	if(all->transfy > 0 && x > 0 && x < all->map->width && all->transfy < all->zBuffer[x])
 		// 	{
 		// 		y = all->dr_starty;
 		// 		while (y < all->dr_drendy)
@@ -295,11 +297,11 @@ void		sprite(t_all *all, int x)
 		// 			int s_texy = ((d * TEX_HEIGHT) / all->sp.img_height) / 256;
 		// 			int color = all->mass_sp[tmp_order[all->sprites->order]][TEX_WIDTH * s_texy + s_texx]; //get current color from the texture
 		// 			if((color & 0x00FFFFFF) != 0)
-		// 				all->buf[y][stripe] = color;
+		// 				all->buf[y][x] = color;
 		// 			y++;
 		// 		}
 		// 	}
-		// 	stripe++;
+		// 	x++;
 		// }
 		all->sprites->order++;
 	}
@@ -656,21 +658,25 @@ void ft_init_plr(t_map_p *map, t_plr *player)
 int keypress(int key, t_all *all)
 {
 	all->rorate = 0.5;
-	all->moveSpeed = 0.05;
+	all->moveSpeed = 0.08;
     //move forward if no wall in front of you
-    if (key == W)
+    if(key == W)
     {
-      if(all->map->map_m[(int)(all->player->y + all->player->dir_y * 0.5)][(int)(all->player->x)] == '0') all->player->y += all->player->dir_y * 0.5;
-      if(all->map->map_m[(int)(all->player->y)][(int)(all->player->x + all->player->dir_x * 0.5)] == '0') all->player->x += all->player->dir_x * 0.5;
+      if(all->map->map_m[(int)(all->player->y + all->player->dir_y * 0.5)][(int)(all->player->x)] == '0') 
+	  	all->player->y += all->player->dir_y * 0.5;
+      if(all->map->map_m[(int)(all->player->y)][(int)(all->player->x + all->player->dir_x * 0.5)] == '0') 
+	  	all->player->x += all->player->dir_x * 0.5;
     }
     //move backwards if no wall behind you
-    if (key == S)
+    if(key == S)
     {
-      if(all->map->map_m[(int)(all->player->y - all->player->dir_y * 0.5)][(int)(all->player->x)] == '0') all->player->y -= all->player->dir_y * 0.5;
-      if(all->map->map_m[(int)(all->player->y)][(int)(all->player->x - all->player->dir_x * 0.5)] == '0') all->player->x -= all->player->dir_x * 0.5;
+      if(all->map->map_m[(int)(all->player->y - all->player->dir_y * 0.5)][(int)(all->player->x)] == '0') 
+	  	all->player->y -= all->player->dir_y * 0.5;
+      if(all->map->map_m[(int)(all->player->y)][(int)(all->player->x - all->player->dir_x * 0.5)] == '0') 
+	  	all->player->x -= all->player->dir_x * 0.5;
     }
     //rotate to the right
-    if (key == A)
+    if(key == D)
     {
       //both camera direction and camera plane must be rotated
       double oldDirX = all->player->dir_x;
@@ -681,7 +687,7 @@ int keypress(int key, t_all *all)
       all->player->plane_y = oldPlaneX * sin(-all->rorate) + all->player->plane_y * cos(-all->rorate);
     }
     //rotate to the left
-    if (key == D)
+    if(key == A)
     {
       //both camera direction and camera plane must be rotated
       double oldDirX = all->player->dir_x;

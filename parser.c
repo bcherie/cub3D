@@ -262,12 +262,12 @@ int		main(int argc, char **argv)
 		printf("Error\nWrong arguement number");
 		exit(0);
 	}
-	if (argc == 3)
-	{
-		bmp_save(all, &argv[2]);
-		// if (ft_strncmp(argv[2], "--save", ft_strlen("--save")))
-		// 	all->map->save = 1;
-	}
+	// if (argc == 3)
+	// {
+	// 	bmp_save(all, &argv[2]);
+	// 	// if (ft_strncmp(argv[2], "--save", ft_strlen("--save")))
+	// 	// 	all->map->save = 1;
+	// }
 	int		fd = open(argv[1], O_RDONLY);
 	char	*line = NULL;	
 	t_list	*head = NULL; // структура для записи спецификаторов
