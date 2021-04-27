@@ -1,4 +1,4 @@
-SRC = sp_1.c bmp_screen.c parser.c screen.c init.c reys.c $(DIR_GNL)/get_next_line_utils.c $(DIR_GNL)/get_next_line.c
+SRC = wrongs.c sprites.c draw.c bmp_screen.c parser.c screen.c init.c reys.c $(DIR_GNL)/get_next_line_utils.c $(DIR_GNL)/get_next_line.c
 
 NAME = cub3D
 

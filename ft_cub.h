@@ -7,12 +7,14 @@
 # include <math.h>
 # include "libft/libft.h"
 # include "get_next_line/get_next_line.h"
-# include "mlx.h"
+# include "libx_opengl/mlx.h"
 #define SCALE 40
 #define W 13
 #define S 1
 #define D 2
 #define A 0
+#define ARROW_L 124
+#define ARROW_R 123
 #define ESC 53
 # define DIV 1
 # define DIV 1
@@ -150,7 +152,7 @@ typedef struct		s_bmp
 	int				fd;
 	int				size;
 	int				h2;
-	unsigned char	head[54];
+	unsigned char	*head;
 	int				clr;
 	int				offset;
 }					t_bmp;
@@ -244,5 +246,7 @@ void ft_coord_sprite(t_all *all);
 void ft_count_sprites(t_all *all);
 void    bmp_save(t_all *all, char *argv);
 void		sprite(t_all *all, int x);
+void ft_draw_textures(t_all *all, int i, int x);
+void wrongs_pars_color(t_all *all, int j);
 
 #endif

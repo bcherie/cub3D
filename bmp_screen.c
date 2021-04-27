@@ -14,8 +14,7 @@ static void		ft_color_to_bmp(t_all *all)
 		{
 			all->bmp.clr = *(int*)(all->data.img_addr + (all->data.llength * i \
 			+ j * (all->data.bpp / 8)));
-			if ((write(all->bmp.fd, &all->bmp.clr, 4)) != 4)
-				exit(0);
+			write(all->bmp.fd, &all->bmp.clr, 4);
 			j++;
 		}
 		i--;
@@ -45,15 +44,15 @@ static void		ft_head_bmp(t_all *all)
 	all->bmp.head[24] = (unsigned char)(all->map->hight >> 16);
 	all->bmp.head[25] = (unsigned char)(all->map->hight >> 24);
 	all->bmp.head[26] = (unsigned char)(1);
-	all->bmp.head[28] = (unsigned char)(24);
+	all->bmp.head[28] = (unsigned char)(32);
+
+	write(all->bmp.fd, all->bmp.head, 54);
     ft_color_to_bmp(all);
 }
 
 void    bmp_save(t_all *all, char *argv)
 {
-    unsigned char *bmp;
-
-	bmp = ft_calloc(54, sizeof(char));
+	all->bmp.head = ft_calloc(54, sizeof(char));
     if (ft_strlen(argv) != 6)
     {
         printf("Error\nError bmp\n");
@@ -64,7 +63,7 @@ void    bmp_save(t_all *all, char *argv)
     {
         if ((ft_strnstr(argv, "--save", 6)))
         {
-            all->bmp.fd = open("bmp", O_WRONLY | O_CREAT | O_TRUNC, 0777);
+            all->bmp.fd = open("bmp.bmp", O_WRONLY | O_CREAT | O_TRUNC, 0777);
 			ft_head_bmp(all);
 			printf("bmp создан\n");
 			close(all->bmp.fd);

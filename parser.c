@@ -80,6 +80,8 @@ void parse(char *line, t_all *all)
 	int i;
 	int j;
 	static int k;
+	int w;
+	int h;
 
 	j = 0;
 	i = 0;
@@ -103,6 +105,13 @@ void parse(char *line, t_all *all)
 			printf("1_Error: wrong spec\n");
 		if (all->map->width < 0 || all->map->hight < 0)
 			printf("1_Error: wrong resolution\n");
+		mlx_get_screen_size(all->win->mlx_w, &w, &h);
+		if(ft_strlen(ft_itoa(all->map->width)) > 4 || ft_strlen(ft_itoa(all->map->hight > 4)))
+		{
+			all->map->width = w;
+			all->map->hight = h;	
+			printf("too big resolution");
+		}
 	}
 	else if (line[i] == 'N' && line[++i] == 'O')
 	{
@@ -146,35 +155,43 @@ void parse(char *line, t_all *all)
 	}
 	else if (line[i] == 'F' && line[++i] == ' ')
 	{
-		if (j != 4)
-			printf("7_Error: wrong spec\n");
+		// if (j != 4)
+		// {
+		// 	printf("7_Error: wrong spec\n");
+		// 	exit(0);
+		// }
 		all->flag += 1;
 		all->map->R = ft_atoi(tmp[1]);
 		all->map->G = ft_atoi(tmp[2]);
 		all->map->B = ft_atoi(tmp[3]);
-		if ((all->map->R > 255 || all->map->G > 255 || all->map->B > 255)
-			|| (all->map->R < 0 || all->map->G < 0 || all->map->B < 0))
-			{
-				printf("Error\nError: invalid digit\n");
-				exit(EXIT_SUCCESS);
-			}
+		wrongs_pars_color(all, j);
+		// if ((all->map->R > 255 || all->map->G > 255 || all->map->B > 255)
+		// 	|| (all->map->R < 0 || all->map->G < 0 || all->map->B < 0))
+		// 	{
+		// 		printf("Error\nError: invalid digit\n");
+		// 		exit(EXIT_SUCCESS);
+		// 	}
 		all->map->floor = create_trgb(0, all->map->R, all->map->G, all->map->B);
 		printf("path_f: %d\n", all->map->floor);
 	}
 	else if (line[i] == 'C')
 	{
-		if (j != 4)
-			printf("8_Error: wrong spec\n");
+		// if (j != 4)
+		// {
+		// 	printf("8_Error: wrong spec\n");
+		// 	exit(0);
+		// }
 		all->flag = 8;
 		all->map->C_R = ft_atoi(tmp[1]);
 		all->map->C_G = ft_atoi(tmp[2]);
 		all->map->C_B = ft_atoi(tmp[3]);
-		if ((all->map->C_R > 255 || all->map->C_G > 255 || all->map->C_B > 255)
-			|| (all->map->C_R < 0 || all->map->C_G < 0 || all->map->C_B < 0))
-			{
-				printf("Error\nError: invalid digit\n");
-				exit(EXIT_SUCCESS);
-			}
+		wrongs_pars_color(all, j);
+		// if ((all->map->C_R > 255 || all->map->C_G > 255 || all->map->C_B > 255)
+		// 	|| (all->map->C_R < 0 || all->map->C_G < 0 || all->map->C_B < 0))
+		// 	{
+		// 		printf("Error\nError: invalid digit\n");
+		// 		exit(EXIT_SUCCESS);
+		// 	}
 		all->map->ceil = create_trgb(0, all->map->C_R, all->map->C_G, all->map->C_B);
 		printf("path_c: %d\n", all->map->ceil);
 	}
@@ -262,12 +279,6 @@ int		main(int argc, char **argv)
 		printf("Error\nWrong arguement number");
 		exit(0);
 	}
-	// if (argc == 3)
-	// {
-	// 	bmp_save(all, &argv[2]);
-	// 	// if (ft_strncmp(argv[2], "--save", ft_strlen("--save")))
-	// 	// 	all->map->save = 1;
-	// }
 	int		fd = open(argv[1], O_RDONLY);
 	char	*line = NULL;	
 	t_list	*head = NULL; // структура для записи спецификаторов
@@ -306,5 +317,11 @@ int		main(int argc, char **argv)
 	all->data.img_addr = mlx_get_data_addr(all->data.img, &all->data.bpp, &all->data.llength, &all->data.end);
 	mlx_hook(all->win->mlx_w, 2, 1L<<0, keypress, all);
 	ft_cast_ray(all);
+	if (argc == 3)
+	{
+		bmp_save(all, argv[2]);
+		// if (ft_strncmp(argv[2], "--save", ft_strlen("--save")))
+		// 	all->map->save = 1;
+	}
 	mlx_loop(all->win->mlx);
 }

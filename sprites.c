@@ -1,36 +1,71 @@
 #include "ft_cub.h"
 
-void draw_sp(t_all *all, int x)
+void sp_wh(t_all *all)
 {
-    int		y;
+    all->spritescreen_x = (int)((all->map->width / 2) * (1 + all->transfx / all->transfy));
+    all->sp_heigth = (int)fabs((all->map->hight / all->transfy) / 1);
+    //calculate lowest and highest pixel to fill in current stripe
+    all->dr_starty = -all->sp_heigth / 2 + all->map->hight / 2 + all->mvscreen;
+    if(all->dr_starty < 0)
+        all->dr_starty = 0;
+    all->dr_drendy = all->sp_heigth / 2 + all->map->hight / 2 + all->mvscreen;
+    if(all->dr_drendy >= all->map->hight)
+        all->dr_drendy = all->map->hight - 1;
 
-	while (x < all->dr_drendx)
+    //calculate width of the sprite
+    all->sp_width = (int)fabs((all->map->hight / all->transfy) / 1);
+    all->dr_startx = -all->sp_width / 2 + all->spritescreen_x;
+    if(all->dr_startx < 0)
+        all->dr_startx = 0;
+    all->dr_drendx = all->sp_width / 2 + all->spritescreen_x;
+    if(all->dr_drendx >= all->map->width)
+        all->dr_drendx = all->map->width - 1;
+
+}
+
+void	sort_order(t_pair *orders, int amount)
+{
+	t_pair	tmp;
+
+	for (int i = 0; i < amount; i++)
 	{
-		all->s_texx = (int)(256 * (x - (-all->sp_width / 2 + \
-		all->spritescreen_x)) * all->sp.img_width / all->sp_width) / 256;
-		if (all->transfy > 0 && x > 0 && x < all->map->width && \
-		all->transfy < all->zBuffer[x])
+		for (int j = 0; j < amount - 1; j++)
 		{
-			y = all->dr_starty;
-			while (y < all->dr_drendy)
+			if (orders[j].first > orders[j + 1].first)
 			{
-				all->d = y * 256 - all->map->hight * 128 + all->sp_heigth * 128;
-				all->s_texy = ((all->d * all->sp.img_height) / \
-				all->sp_heigth) / 256;
-				all->s_clr = *(unsigned int*)(all->sp.img_addr + \
-				(all->s_texy * all->sp.llength + all->s_texx * \
-				(all->sp.bpp / 8)));
-				if ((all->s_clr & 0x00FFFFFF) != 0)
-					my_mlx_pixel_put(all, x, y, all->s_clr);
-				y++;
+				tmp.first = orders[j].first;
+				tmp.second = orders[j].second;
+				orders[j].first = orders[j + 1].first;
+				orders[j].second = orders[j + 1].second;
+				orders[j + 1].first = tmp.first;
+				orders[j + 1].second = tmp.second;
 			}
 		}
-		x++;
 	}
 }
 
+void sprite_sort(int *order, double *dist, int amount)
+{
+	t_pair	*sprite;
+    int i;
 
+    i = 0;
+	sprite = (t_pair*)malloc(sizeof(t_pair) * amount);
+	while (i < amount)
+	{
+		sprite[i].first = dist[i];
+		sprite[i].second = order[i];
+        i++;
+	}
+	sort_order(sprite, amount);
+	for (int i = 0; i < amount; i++)
+	{
+		dist[i] = sprite[amount - i - 1].first;
+		order[i] = sprite[amount - i - 1].second;
+	}
+	free(sprite);
 
+}
 
 void ft_coord_sprite(t_all *all)
 {
@@ -64,5 +99,44 @@ void ft_coord_sprite(t_all *all)
 			j++;
 		}
 		i++;
+	}
+}
+
+void		sprite(t_all *all, int x)
+{
+	int i;
+	i = 0;
+
+	ft_coord_sprite(all);
+	int *tmp_order;
+	double  *dist;
+	tmp_order = malloc(sizeof(int) * all->num_sp);
+	dist = malloc(sizeof(double) * all->num_sp);
+	all->sprites->order = 0;
+	while (all->sprites->order < all->num_sp)
+	{
+		tmp_order[all->sprites->order] = all->sprites->order;
+		dist[all->sprites->order] = sqrt(pow(all->player->x - all->mass_sp[all->sprites->order][0], 2) + pow(all->player->y - all->mass_sp[all->sprites->order][1], 2));
+		all->sprites->order++;
+	}
+	sprite_sort(tmp_order, dist, all->num_sp);
+	all->sprites->order = 0;
+	while (all->sprites->order < all->num_sp)
+	{
+		//translate sprite position to relative to camera
+		all->sp_x = all->mass_sp[tmp_order[all->sprites->order]][0] - all->player->x;
+		all->sp_y = all->mass_sp[tmp_order[all->sprites->order]][1] - all->player->y;
+		double invDet = 1.0 / (all->player->plane_x * all->player->dir_y - all->player->dir_x * all->player->plane_y); //required for correct matrix multiplication
+
+		all->transfx = invDet * (all->player->dir_y * all->sp_x - all->player->dir_x * all->sp_y);
+		all->transfy = invDet * (-all->player->plane_y * all->sp_x + all->player->plane_x * all->sp_y); //this is actually the depth inside the screen, that what Z is in 3D, the distance of sprite to player, matching sqrt(spriteDistance[i])
+		all->spritescreen_x = (int)((all->map->width / 2) * (1 + all->transfx / all->transfy));
+
+		//parameters for scaling and moving the sprites
+		all->mvscreen = (int)(MOVE / all->transfy);
+        sp_wh(all);
+		x = all->dr_startx;
+		draw_sp(all, x);
+		all->sprites->order++;
 	}
 }

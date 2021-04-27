@@ -9,7 +9,7 @@
             "type": "lldb",
             "request": "launch",
             "program": "${workspaceFolder}/cub3D",
-            "args": ["${workspaceFolder}/map.cub"],
+            "args": ["${workspaceFolder}/map.cub", "--save"],
             // "stopAtEntry": true,
             "cwd": "${workspaceFolder}",
             // "environment": [],
