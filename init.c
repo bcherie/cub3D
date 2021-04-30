@@ -22,18 +22,18 @@ void ft_init_map(t_all *all)
 	all->map->save = 0;
 }
 
-// void ft_init_w(t_window *win)
-// {
-// 	//win->win = NULL;
-// 	win->mlx = NULL;
-// 	win->mlx_w = NULL;
-// 	win->img_w = 0;
-//     win->addr = NULL;
-//     win->bits_per_pixel = 0;
-//     win->line_length = 0;
-//     win->endian = 0;
-// }
-
+void init_flags(t_all *all)
+{
+	all->flag_r		= 0;
+	all->flag_no	= 0;
+	all->flag_so	= 0;
+	all->flag_ea	= 0;
+	all->flag_we	= 0;
+	all->flag_s		= 0;
+	all->flag_f		= 0;
+	all->flag_c		= 0;
+	all->flag_map	= 0;
+}
 void ft_init_scale(t_scale *mashtab)
 {
 	mashtab->one = 0;
@@ -42,8 +42,6 @@ void ft_init_scale(t_scale *mashtab)
 
 void ft_init_tex(t_texture *tex)
 {
-// void	*mlx_img;
-	// void	*mlx_w_ing;
 	tex->img = NULL;
 	tex->img_width = 0;
 	tex->img_height = 0;

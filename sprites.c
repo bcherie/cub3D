@@ -116,7 +116,8 @@ void		sprite(t_all *all, int x)
 	while (all->sprites->order < all->num_sp)
 	{
 		tmp_order[all->sprites->order] = all->sprites->order;
-		dist[all->sprites->order] = sqrt(pow(all->player->x - all->mass_sp[all->sprites->order][0], 2) + pow(all->player->y - all->mass_sp[all->sprites->order][1], 2));
+		dist[all->sprites->order] = sqrt(pow(all->player->x - all->mass_sp[all->sprites->order][0], 2) \
+		+ pow(all->player->y - all->mass_sp[all->sprites->order][1], 2));
 		all->sprites->order++;
 	}
 	sprite_sort(tmp_order, dist, all->num_sp);
@@ -126,14 +127,14 @@ void		sprite(t_all *all, int x)
 		//translate sprite position to relative to camera
 		all->sp_x = all->mass_sp[tmp_order[all->sprites->order]][0] - all->player->x;
 		all->sp_y = all->mass_sp[tmp_order[all->sprites->order]][1] - all->player->y;
-		double invDet = 1.0 / (all->player->plane_x * all->player->dir_y - all->player->dir_x * all->player->plane_y); //required for correct matrix multiplication
+		double invDet = 1.0 / (all->player->plane_x * all->player->dir_y - all->player->dir_x * all->player->plane_y);
 
 		all->transfx = invDet * (all->player->dir_y * all->sp_x - all->player->dir_x * all->sp_y);
 		all->transfy = invDet * (-all->player->plane_y * all->sp_x + all->player->plane_x * all->sp_y); //this is actually the depth inside the screen, that what Z is in 3D, the distance of sprite to player, matching sqrt(spriteDistance[i])
 		all->spritescreen_x = (int)((all->map->width / 2) * (1 + all->transfx / all->transfy));
 
 		//parameters for scaling and moving the sprites
-		all->mvscreen = (int)(MOVE / all->transfy);
+		all->mvscreen = 0;
         sp_wh(all);
 		x = all->dr_startx;
 		draw_sp(all, x);

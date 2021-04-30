@@ -11,6 +11,8 @@
 		"unordered_map": "c",
 		"vector": "c",
 		"__locale": "c",
-		"ios": "c"
+		"ios": "c",
+		"__string": "c",
+		"algorithm": "c"
 	}
 }

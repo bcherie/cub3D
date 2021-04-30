@@ -39,7 +39,6 @@ int		create_trgb(int t, int r, int g, int b)
 {
 	t = 0; 
 	return(t << 24 | r << 16 | g << 8 | b);
-	//return (0);
 }
 
 static size_t	words_count(char const *s, char sp)
@@ -61,9 +60,9 @@ static size_t	words_count(char const *s, char sp)
 char check_zap(char *line)
 {
 	char *t;
-	// int i;
+	int i;
 
-	// i = 0;
+	i = 0;
 	t = line;
 	while (*t != '\0')
 	{
@@ -79,141 +78,93 @@ void parse(char *line, t_all *all)
 {
 	int i;
 	int j;
-	static int k;
-	int w;
-	int h;
+	int	x;
 
 	j = 0;
 	i = 0;
-	k = 0;
+	x = 0;
 
 	char **tmp;
-	//char **colr;
+	// init_flags(all);
 	check_zap(line);
-	printf("line: %s", line);
 	j = words_count(line, ' ');
 	tmp = ft_split(&line[i], ' ');
-	// printf("k: %d\n", k);
 	if (line[i] == 'R')
 	{
-		all->flag += 1;
+		all->x++;
+		all->flag_r += 1;
 		all->map->width = ft_atoi(tmp[1]);
 		all->map->hight = ft_atoi(tmp[2]);
-		printf("width: %d\n", all->map->width);
-		printf("hight: %d\n", all->map->hight);
-		if (j != 3)
-			printf("1_Error: wrong spec\n");
-		if (all->map->width < 0 || all->map->hight < 0)
-			printf("1_Error: wrong resolution\n");
-		mlx_get_screen_size(all->win->mlx_w, &w, &h);
-		if(ft_strlen(ft_itoa(all->map->width)) > 4 || ft_strlen(ft_itoa(all->map->hight > 4)))
-		{
-			all->map->width = w;
-			all->map->hight = h;	
-			printf("too big resolution");
-		}
+		wrongs_pars_resolution(all, j);
 	}
 	else if (line[i] == 'N' && line[++i] == 'O')
 	{
-		if (j != 2)
-			printf("2_Error: wrong spec\n");
-		all->flag += 1;
+		all->x++;
+		all->flag_no += 1;
+		wrongs_pars_texture(all, j);
 		all->map->path_no = tmp[1];
-		printf("path_no: %s\n", all->map->path_no);
 	}
 	else if (ft_strnstr(line, "SO", ft_strlen(line)))
 	{
-		if (j != 2)
-			printf("3_Error: wrong spec\n");
-		all->flag += 1;
+		all->x++;
+		all->flag_so += 1;
+		wrongs_pars_texture(all, j);
 		all->map->path_so = tmp[1];
-		printf("path_so: %s\n", all->map->path_so);
 	}
 	else if (line[i] == 'W' && line[++i] == 'E')
 	{
-		if (j != 2)
-			printf("4_Error: wrong spec\n");
-		all->flag += 1;
+		all->x++;
+		all->flag_we += 1;
+		wrongs_pars_texture(all, j);
 		all->map->path_we = tmp[1];
-		printf("path_we: %s\n", all->map->path_we);	
 	}
 	else if (line[i] == 'E' && line[++i] == 'A')
 	{
-		if (j != 2)
-			printf("5_Error: wrong spec\n");
-		all->flag += 1;
+		all->x++;
+		all->flag_ea += 1;
+		wrongs_pars_texture(all, j);
 		all->map->path_ea = tmp[1];
-		printf("path_ea: %s\n", all->map->path_ea);
 	}
 	else if (ft_strnstr(line, "S ", ft_strlen(line)))
 	{
-		if (j != 2)
-			printf("6_Error: wrong spec\n");
-		all->flag += 1;
+		all->x++;
+		all->flag_s += 1;
+		wrongs_pars_texture(all, j);
 		all->map->path_sprite = tmp[1];
-		printf("path_s: %s\n", all->map->path_sprite);
 	}
 	else if (line[i] == 'F' && line[++i] == ' ')
 	{
-		// if (j != 4)
-		// {
-		// 	printf("7_Error: wrong spec\n");
-		// 	exit(0);
-		// }
-		all->flag += 1;
+		all->x++;
+		all->flag_f += 1;
 		all->map->R = ft_atoi(tmp[1]);
 		all->map->G = ft_atoi(tmp[2]);
 		all->map->B = ft_atoi(tmp[3]);
 		wrongs_pars_color(all, j);
-		// if ((all->map->R > 255 || all->map->G > 255 || all->map->B > 255)
-		// 	|| (all->map->R < 0 || all->map->G < 0 || all->map->B < 0))
-		// 	{
-		// 		printf("Error\nError: invalid digit\n");
-		// 		exit(EXIT_SUCCESS);
-		// 	}
 		all->map->floor = create_trgb(0, all->map->R, all->map->G, all->map->B);
-		printf("path_f: %d\n", all->map->floor);
 	}
 	else if (line[i] == 'C')
 	{
-		// if (j != 4)
-		// {
-		// 	printf("8_Error: wrong spec\n");
-		// 	exit(0);
-		// }
-		all->flag = 8;
+		all->x++;
+		all->flag_c += 1;
 		all->map->C_R = ft_atoi(tmp[1]);
 		all->map->C_G = ft_atoi(tmp[2]);
 		all->map->C_B = ft_atoi(tmp[3]);
 		wrongs_pars_color(all, j);
-		// if ((all->map->C_R > 255 || all->map->C_G > 255 || all->map->C_B > 255)
-		// 	|| (all->map->C_R < 0 || all->map->C_G < 0 || all->map->C_B < 0))
-		// 	{
-		// 		printf("Error\nError: invalid digit\n");
-		// 		exit(EXIT_SUCCESS);
-		// 	}
 		all->map->ceil = create_trgb(0, all->map->C_R, all->map->C_G, all->map->C_B);
-		printf("path_c: %d\n", all->map->ceil);
 	}
-	// while (*line)
+	// printf("i %d\n", i);
+	// if(i != 8)
 	// {
-	// 	if (*line == '\0')
-	// 		k += 1; 
-	// 	// if((tmp[0] == "R") > 1)
-	// 	// 	printf("Error: wrong dub_spec\n");
-	// 	// if (k != 8)
-	// 	// 	printf("Error: wrong col_spec\n");
-	// 	(*line)++;
-	// 	// k++;
+	// 	printf("Error\nWrong spec arg");
+	// 	exit(0);
+	// }
+	// 	i++;
+	// if(i != 8)
+	// {
+	// 	printf("Error\nWrong spec arg");
+	// 	exit(0);
 	// }
 }
-
-// write func for allocateion memory for sprites:
-// void ft_memory_sp(t_all *all)
-// {
-// 	all->mass_sp = (int **)ft_calloc((all->num_sp + 1), sizeof(int **));
-
-// }
 
 void ft_count_sprites(t_all *all)
 {
@@ -235,14 +186,8 @@ void ft_count_sprites(t_all *all)
 	}
 }
 
-// char	**make_map(t_list **head, t_map_p *map, int size)
 char	**make_map(t_list **head, t_all *all, int size)
 {
-	// size = 0;
-	// t_map_p *map;
-	//map->map_m = ft_calloc(ft_mapsize(map) + 1, sizeof(char *));
-	// printf("Map: %p\n", &map->map_m);
-	// map->map_m =(char **)malloc(sizeof(char) * (size + 1));
 	all->map->map_m = ft_calloc(size + 1, sizeof(char **));
 	int		  i = -1;
 	t_list	*tmp = *head;
@@ -252,40 +197,38 @@ char	**make_map(t_list **head, t_all *all, int size)
 		all->map->map_m[++i] = tmp->content;
 		tmp = tmp->next;
 	}
-	i = -1;
-	while (all->map->map_m[++i])
-		ft_putendl_fd(all->map->map_m[i]);
-	// while (map->map_m)
-	//printf("map: %s", map->map_m[0]);
+	// i = -1;
+	// while (all->map->map_m[++i])
+	// 	ft_putendl_fd(all->map->map_m[i]);
 	return (all->map->map_m);
 }
 
-
 int		main(int argc, char **argv)
 {
-	t_all		*all;
+	t_all		*all = NULL;
+	char	*line = NULL;	
+	t_list	*head = NULL;
+	int		fd;
 
 	if (!(all = (t_all *)malloc(sizeof(t_all))))
 	{
 		printf("Error\nMalloc error");
 		exit(0);
 	}
-	// ft_bzero(all, sizeof(t_all));
-	// all->map = malloc(sizeof(t_map_p));
-	// ft_init(all);
-	// all->num_sp = 0;
 	if (argc < 2)
 	{
 		printf("Error\nWrong arguement number");
 		exit(0);
 	}
-	int		fd = open(argv[1], O_RDONLY);
-	char	*line = NULL;	
-	t_list	*head = NULL; // структура для записи спецификаторов
+	all->flag_map = 0;
+	//fd = open(argv[1], O_RDONLY);
+	//from_main(all, argc);
 	all->map = (t_map_p *)malloc(sizeof(t_map_p));
 	all->win = (t_window *)malloc(sizeof(t_window));
 	all->player = (t_plr *)malloc(sizeof(t_plr));
+	init_flags(all);
 	ft_init_map(all);
+	fd = open(argv[1], O_RDONLY);
 	if (argc >= 2)
 	{
 		if (ft_strnstr(ft_strrchr(argv[1], '.'), ".cub", ft_strlen(".cub")))
@@ -294,20 +237,41 @@ int		main(int argc, char **argv)
 			{
 				if (*line == '1' || *line == ' ')
 				{
+					all->flag_map = 1;
+					map_spec(line);
 					ft_lstadd_back(&head, ft_lstnew(line));
 				}
 				else
 					parse(line, all);
+				// printf("flag: %d", all->flag_map);
+				if (all->flag_map == 1)
+				{
+					if (ft_strlen(line) == 0)
+					{
+						printf("inv map");
+						exit(0);	
+					}
+				}
 			}
-			ft_lstadd_back(&head, ft_lstnew(line));
-			// printf("flag_a: %d\n", all->flag);
-			if (all->flag < 8 || all->flag > 8)
-				printf("Error\nError: Don't have spec\n");
+			ft_lstadd_back(&head, ft_lstnew(line));	
 			make_map(&head, all, ft_lstsize(head));
+			map_zamk(all);
 		}
 		else 
 			printf("Error: map's name error\n");
 	}
+	//printf("i %d\n", all->x);
+	// if(all->x != 8)
+	// {
+	// 	printf("Error\nWrong spec arg");
+	// 	exit(0);
+	//}
+	// j = all->flag_c + all->flag_f + all->flag_we + all->flag_ea + all->flag_no + all->flag_so + all->flag_s + all->flag_r;
+	// if (j != 8)
+	// {
+	// 	printf("Error\nWrong spec arg");
+	// 	exit(0);
+	// }
 	ft_count_sprites(all);
 	ft_init_plr(all->map, all->player);
 	all->win->mlx = mlx_init();
@@ -318,10 +282,6 @@ int		main(int argc, char **argv)
 	mlx_hook(all->win->mlx_w, 2, 1L<<0, keypress, all);
 	ft_cast_ray(all);
 	if (argc == 3)
-	{
 		bmp_save(all, argv[2]);
-		// if (ft_strncmp(argv[2], "--save", ft_strlen("--save")))
-		// 	all->map->save = 1;
-	}
 	mlx_loop(all->win->mlx);
 }

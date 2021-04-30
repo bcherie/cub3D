@@ -1,16 +1,16 @@
 #include "ft_cub.h"
 
-void ft_init_w(t_window *win)
-{
-	win->mlx = NULL;
-	win->win = NULL;
-	win->img = NULL;
-    win->addr = NULL;
-    win->bits_per_pixel = 0;
-    win->line_length = 0;
-    win->endian = 0;
+// void ft_init_w(t_window *win)
+// {
+// 	win->mlx = NULL;
+// 	win->win = NULL;
+// 	win->img = NULL;
+//     win->addr = NULL;
+//     win->bits_per_pixel = 0;
+//     win->line_length = 0;
+//     win->endian = 0;
 
-}
+// }
 
 // void ft_init_all(t_all *all)
 // {
@@ -20,11 +20,11 @@ void ft_init_w(t_window *win)
 // 	all->map = NULL;
 // }
 
-void ft_init_point(t_point *point) // структура для точки
-{
-	point->x = 0;
-	point->y = 0;
-}
+// void ft_init_point(t_point *point) // структура для точки
+// {
+// 	point->x = 0;
+// 	point->y = 0;
+// }
 
 // void init_str(t_list *head)
 // {

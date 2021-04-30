@@ -177,7 +177,14 @@ typedef struct		s_all
 	double			moveSpeed;
 	double			rorate;
 	int				**buf;
-	int				flag;
+	int				flag_r;
+	int				flag_no;
+	int				flag_so;
+	int				flag_ea;
+	int				flag_we;
+	int				flag_s;
+	int				flag_f;
+	int				flag_c;
 	int				num_sp;
 	//int				tmp_order;
 	double			**mass_sp;
@@ -199,6 +206,10 @@ typedef struct		s_all
 	int	sp_width;
 	int	sp_heigth;
 	t_bmp			bmp;
+	t_list			newlist;
+	int				**c_map;
+	int				flag_map;
+	int				x;
 	// double	dist;
 	// int		order;
 	//t_plr			*plr;
@@ -248,5 +259,13 @@ void    bmp_save(t_all *all, char *argv);
 void		sprite(t_all *all, int x);
 void ft_draw_textures(t_all *all, int i, int x);
 void wrongs_pars_color(t_all *all, int j);
+void wrongs_pars_resolution(t_all *all, int j);
+void wrongs_pars_texture(t_all *all, int j);
+void init_flags(t_all *all);
+void parse_fc(t_all *all, int j);
+void valid_map(char *line);
+void map_spec(char *line);
+void map_zamk(t_all *all);
+void from_main(t_all *all, int argc);
 
 #endif
