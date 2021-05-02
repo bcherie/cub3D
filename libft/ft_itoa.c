@@ -12,9 +12,9 @@
 
 #include "libft.h"
 
-static int		ft_count(int n)
+static int	ft_count(int n)
 {
-	int res;
+	int	res;
 
 	res = 0;
 	if (n < 0)
@@ -32,7 +32,7 @@ static int		ft_count(int n)
 	return (res);
 }
 
-char			*ft_itoa(int n)
+char	*ft_itoa(int n)
 {
 	char			*s;
 	unsigned int	len;
@@ -40,7 +40,8 @@ char			*ft_itoa(int n)
 	len = ft_count(n);
 	if (n == -2147483648)
 		return (ft_strdup("-2147483648"));
-	if (!(s = (char *)malloc(sizeof(char) * len + 1)))
+	s = (char *)malloc(sizeof(char) * len + 1);
+	if (!s)
 		return (NULL);
 	s[len] = '\0';
 	if (n == 0)

@@ -1,4 +1,6 @@
-SRC = wrongs_2.c wrongs.c sprites.c draw.c bmp_screen.c parser.c screen.c init.c reys.c $(DIR_GNL)/get_next_line_utils.c $(DIR_GNL)/get_next_line.c
+SRC = bmp_screen.c draw.c init.c key_press.c parser_specif.c parser_specif2.c \
+ 	parser.c player.c reys.c sprites_utils.c sprites.c textures.c utils.c \
+	write_texture.c wrongs.c $(DIR_GNL)/get_next_line_utils.c $(DIR_GNL)/get_next_line.c
 
 NAME = cub3D
 
@@ -8,11 +10,10 @@ OBJS	= ${SRC:.c=.o}
 
 LIBDIR	= libft
 LIBA	= $(LIBDIR)/libft.a
-LIB_MLX 	= libx_opengl
+#libx_opengl
+LIB_MLX 	= minilibx
 MLXLIBA		= $(LIB_MLX)/libmlx.a
 DIR_GNL 	= get_next_line
-#SRC_GNL 	= $(DIR_GNL)/get_next_line.c $(DIR_GNL)/get_next_line_utils.c
-#OBJ_GNL		= $(DIR_GNL)/get_next_line.o $(DIR_GNL)/get_next_line_utils.o
 
 INCLUDES = -I$(LIBDIR) -I$(LIB_MLX) -I$(DIR_GNL)
 
@@ -21,26 +22,17 @@ MLXLAGS = -lmlx	-framework	OpenGL -framework AppKit
 
 HFILES = ft_cub.h
 
-#cub3D/%.o: cub3D/%.c
-#		${CC} ${CFLAGS} -c $< -o ${<:.c=.o}
-
-#instruction
-
-#%.o:	%.c $(HFILES)
-#		$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
+%.o $(DIR_GNL)/%.o:	%.c $(DIR_GNL)/%.c
+		$(CC) $(CFLAGS) $(HFILES) -c $< -o $@
 
 all:		$(NAME)
 
 $(NAME):	$(LIBA) $(MLXLIBA) $(OBJS)
-			$(CC) $(CFLAGS) $(OBJS) $(INCLUDES) $(LIBA) $(MLXLIBA) $(MLXLAGS) -o $(NAME)
+			$(CC) $(OBJS) $(INCLUDES) $(LIBA) $(MLXLIBA) $(MLXLAGS) -o $(NAME)
 
-
-#gnl:
-#			$(CC) -c $(CFLAGS) $(SRC_GNL)
-	
-$(LIBA):		
+$(LIBA):
 			$(MAKE) -j4 -C $(LIBDIR)
-$(MLXLIBA):		
+$(MLXLIBA):
 			$(MAKE) -j4 -C $(LIB_MLX)
 
 clean:

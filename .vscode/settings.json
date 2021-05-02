@@ -13,6 +13,7 @@
 		"__locale": "c",
 		"ios": "c",
 		"__string": "c",
-		"algorithm": "c"
+		"algorithm": "c",
+		"ft_cub.h": "c"
 	}
 }

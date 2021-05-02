@@ -1,6 +1,6 @@
 #include "ft_cub.h"
 
-void ft_init_map(t_all *all)
+void	ft_init_map(t_all *all)
 {
 	all->map->width = 0;
 	all->map->hight = 0;
@@ -22,25 +22,28 @@ void ft_init_map(t_all *all)
 	all->map->save = 0;
 }
 
-void init_flags(t_all *all)
+void	init_flags(t_all *all)
 {
-	all->flag_r		= 0;
-	all->flag_no	= 0;
-	all->flag_so	= 0;
-	all->flag_ea	= 0;
-	all->flag_we	= 0;
-	all->flag_s		= 0;
-	all->flag_f		= 0;
-	all->flag_c		= 0;
-	all->flag_map	= 0;
+	all->flag_r = 0;
+	all->flag_no = 0;
+	all->flag_so = 0;
+	all->flag_ea = 0;
+	all->flag_we = 0;
+	all->flag_s = 0;
+	all->flag_f = 0;
+	all->flag_c = 0;
+	all->flag_map = 0;
+	all->x = 0;
+	all->j = 0;
 }
-void ft_init_scale(t_scale *mashtab)
+
+void	ft_init_scale(t_scale *mashtab)
 {
 	mashtab->one = 0;
 	mashtab->two = 0;
 }
 
-void ft_init_tex(t_texture *tex)
+void	ft_init_tex(t_texture *tex)
 {
 	tex->img = NULL;
 	tex->img_width = 0;
@@ -51,12 +54,12 @@ void ft_init_tex(t_texture *tex)
 	tex->end = 0;
 }
 
-void ft_inint_plr_str(t_plr *player)
+void	ft_inint_plr_str(t_plr *player)
 {
-	player->x		= 0;
-	player->y		= 0;
-	player->dir_x	= 0.0;
-	player->dir_y	= 0.0;
-	player->start	= 0;
-	player->end		= 0;
+	player->x = 0;
+	player->y = 0;
+	player->dir_x = 0.0;
+	player->dir_y = 0.0;
+	player->start = 0;
+	player->end = 0;
 }

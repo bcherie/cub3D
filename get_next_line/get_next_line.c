@@ -1,89 +1,71 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   get_next_line.c                                    :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: bcherie <marvin@42.fr>                     +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/12/22 17:14:02 by bcherie           #+#    #+#             */
-/*   Updated: 2020/12/25 11:20:52 by bcherie          ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "get_next_line.h"
 
-char	*rem(char **res, char **line)
+static int	fill_data_buf(int fd, char **data_buf)
 {
-	char	*ptr;
-	char	*t;
+	char	*buf;
+	char	*old_data_buf;
+	int		num_of_read_bytes;
 
-	ptr = NULL;
-	*line = ft_strdup("");
-	if (*res != NULL)
-	{
-		if ((ptr = ft_strchr(*res, '\n')))
-		{
-			*ptr = '\0';
-			t = *line;
-			*line = ft_strdup(*res);
-			free(t);
-			ft_strcpy(*res, ++ptr);
-		}
-		else
-		{
-			t = *line;
-			*line = ft_strdup(*res);
-			free(t);
-			free(*res);
-			*res = NULL;
-		}
-	}
-	return (ptr);
-}
-
-int		get_next_line(int fd, char **line)
-{
-	char		buf[BUFFER_SIZE + 1];
-	int			num;
-	char		*k;
-	static char	*res;
-	char		*t;
-
-	num = 1;
-	if (!line || BUFFER_SIZE <= 0 || fd < 0 || read(fd, buf, 0) == -1)
+	buf = malloc(sizeof(char) * (BUFFER_SIZE + 1));
+	if (!(buf))
 		return (-1);
-	k = rem(&res, line);
-	while (!k && (num = read(fd, buf, BUFFER_SIZE)))
+	num_of_read_bytes = read(fd, buf, BUFFER_SIZE);
+	if (num_of_read_bytes == -1)
 	{
-		buf[num] = '\0';
-		if ((k = ft_strchr(buf, '\n')))
-		{
-			*k = '\0';
-			k++;
-			res = ft_strdup(k);
-		}
-		t = *line;
-		if (!(*line = ft_strjoin(*line, buf)))
-			return (-1);
-		free(t);
+		free(buf);
+		return (-1);
 	}
-	return ((!num) ? 0 : 1);
+	buf[num_of_read_bytes] = '\0';
+	old_data_buf = *data_buf;
+	*data_buf = ft_strjoin(*data_buf, buf);
+	if (!*data_buf)
+		return (-1);
+	free(old_data_buf);
+	free(buf);
+	return (num_of_read_bytes);
 }
-// 	int    main()
-// {
-//     char *line;
-//  	int i = 0;
-//
-//     int fd = open("test.txt", O_RDONLY);
-//     while ((i = get_next_line(fd, &line)))
-//  	{
-//      	printf("line: %s\n", line);
-//  		printf("return: %d\n", i);
-// 		free(line);
-//  	}
-//  	printf("line: %s\n", line);
-//  	printf("return: %d\n", i);
-// 	free(line);
-//     return (0);
-//  }
 
+static int	check_result_of_read(int n_bytes, char **data_buf, char **line)
+{
+	if (n_bytes == -1)
+	{
+		free(*data_buf);
+		*data_buf = 0;
+		return (-1);
+	}
+	if (n_bytes == 0)
+	{
+		*line = ft_strjoin(*data_buf, 0);
+		if (!*line)
+			return (-1);
+		free(*data_buf);
+		*data_buf = 0;
+		return (0);
+	}
+	return (-1);
+}
+
+int	get_next_line(int fd, char **line)
+{
+	char		*nl_founder;
+	static char	*data_buf;
+	int			num_of_read_bytes;
+
+	if (!line || BUFFER_SIZE <= 0 || fd < 0 || read(fd, NULL, 0) == -1)
+		return (-1);
+	nl_founder = ft_strchr(data_buf, '\n');
+	while (!(nl_founder))
+	{
+		num_of_read_bytes = fill_data_buf(fd, &data_buf);
+		if (num_of_read_bytes <= 0)
+			return (check_result_of_read(num_of_read_bytes, &data_buf, line));
+		nl_founder = ft_strchr(data_buf, '\n');
+	}
+	*nl_founder = '\0';
+	nl_founder++;
+	*line = ft_strjoin(0, data_buf);
+	if (!*line)
+		return (-1);
+	ft_strlcpy(data_buf, nl_founder, ft_strlen(nl_founder) + 1);
+	return (1);
+}
